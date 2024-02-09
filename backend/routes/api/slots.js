@@ -1,11 +1,10 @@
 const express = require("express");
+const { Slot } = require("../../db/models");
 const router = express.Router();
-const { User } = require("../../db/models");
 
-/* GET users listing. */
 router.get("/", async (req, res, next) => {
-  const users = await User.findAll();
-  return res.json(users);
+  const slots = await Slot.findAll();
+  return res.json(slots);
 });
 
 module.exports = router;

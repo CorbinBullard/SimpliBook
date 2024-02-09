@@ -2,27 +2,38 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Slots", {
+    await queryInterface.createTable("Bookings", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      service_type_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "ServiceTypes",
-          key: "id",
-        },
-      },
-      day: {
+      slot_id: {
         type: Sequelize.INTEGER,
       },
-      start_time: {
-        type: Sequelize.TIME,
+      recurring: {
+        type: Sequelize.BOOLEAN,
       },
-      end_time: {
+      name: {
+        type: Sequelize.STRING,
+      },
+      number: {
+        type: Sequelize.STRING,
+      },
+      email: {
+        type: Sequelize.STRING,
+      },
+      paid: {
+        type: Sequelize.BOOLEAN,
+      },
+      persons: {
+        type: Sequelize.INTEGER,
+      },
+      date: {
+        type: Sequelize.DATE,
+      },
+      time: {
         type: Sequelize.TIME,
       },
       createdAt: {
@@ -38,6 +49,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Slots");
+    await queryInterface.dropTable("Bookings");
   },
 };

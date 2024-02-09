@@ -4,10 +4,10 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const { environment } = require("./config");
-const routes = require("./routes");
 const isProduction = process.env.NODE_ENV === "production";
-const { ValidationError } = require("sequelize");
+
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/api/users");
 
 const app = express();
 
@@ -16,8 +16,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(routes);
 
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
 
 if (!isProduction) {
   // enable cors only in development

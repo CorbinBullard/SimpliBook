@@ -15,9 +15,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         as: 'user'
       });
-      ServiceType.hasMany(models.Slot, {
+      ServiceType.hasMany(models.ServiceType, {
         foreignKey: 'service_type_id',
-        as: 'slots'
+        as: 'recurring_patterns'
       });
     }
   }
