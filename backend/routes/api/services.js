@@ -10,6 +10,39 @@ router.get("/", async (req, res) => {
   const serviceTypes = await ServiceType.findAll();
   return res.json(serviceTypes);
 });
+//Get all current User's service types
+router.get("/current", requireAuth, async (req, res) => {
+  const { user } = req;
+  if (!user) return res.json({ message: "No user found" });
+  const serviceTypes = await ServiceType.findAll({
+    where: { user_id: user.toJSON().id },
+  });
+  return res.json(serviceTypes);
+});
+
+router.post("/", requireAuth, async (req, res) => {
+  const { user } = req;
+  if (!user) return res.json({ message: "No user found" });
+  const { name, price, capacity } = req.body;
+  const serviceType = await ServiceType.create({
+    name,
+    price,
+    capacity,
+    user_id: user.toJSON().id,
+  });
+  return res.json(serviceType);
+});
+
+router.delete("/:id", requireAuth, async (req, res) => {
+  const { user } = req;
+  if (!user) return res.json({ message: "No user found" });
+  const serviceType = await ServiceType.findByPk(req.params.id);
+  if (!serviceType) return res.json({ message: "No service type found" });
+  if (serviceType.toJSON().user_id !== user.toJSON().id)
+    return res.json({ message: "Unauthorized" });
+  await serviceType.destroy();
+  return res.json({ message: "Service type deleted" });
+});
 
 // SLOTS
 //Get slots for a specific service type

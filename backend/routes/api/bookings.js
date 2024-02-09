@@ -27,6 +27,7 @@ router.post("/", async (req, res, next) => {
       date,
     },
   });
+  
   if (conflictingBookings.length) {
     bookingsJSON = conflictingBookings.map((booking) => booking.toJSON());
     console.log(bookingsJSON);

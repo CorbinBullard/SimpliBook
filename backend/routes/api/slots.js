@@ -9,6 +9,7 @@ router.get("/", async (req, res, next) => {
   return res.json(slots);
 });
 
+//Get all current User's slots
 router.get("/current", async (req, res, next) => {
   const { user } = req;
 
@@ -29,4 +30,5 @@ router.delete("/:id", async (req, res, next) => {
   await slot.destroy();
   return res.json({ message: "Slot deleted" });
 });
+
 module.exports = router;
