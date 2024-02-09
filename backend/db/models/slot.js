@@ -11,11 +11,15 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Slot.belongsTo(models.ServiceType, {
         foreignKey: "service_type_id",
-        as: "service_type",
+        // as: "service_type",
       });
       Slot.hasMany(models.Booking, {
         foreignKey: "slot_id",
-        as: "bookings",
+        // as: "bookings",
+      });
+      Slot.belongsTo(models.User, {
+        foreignKey: "user_id",
+        // as: "user",
       });
     }
   }

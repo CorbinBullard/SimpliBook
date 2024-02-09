@@ -4,6 +4,7 @@ const { restoreUser } = require("../../utils/auth");
 
 router.use(restoreUser);
 
+router.use("/service", require("./service"));
 router.use("/session", require("./session"));
 router.use("/users", require("./users"));
 router.use("/slots", require("./slots"));

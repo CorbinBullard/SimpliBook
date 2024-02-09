@@ -17,4 +17,5 @@ const bookingCheck = (date, slot) => {
 
   return info;
 };
+
 module.exports = { bookingCheck };

@@ -11,6 +11,10 @@ module.exports = {
       },
       slot_id: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "Slots",
+          key: "id",
+        },
       },
       recurring: {
         type: Sequelize.BOOLEAN,
