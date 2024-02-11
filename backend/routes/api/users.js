@@ -8,4 +8,10 @@ router.get("/", async (req, res, next) => {
   return res.json(users);
 });
 
+// Create a new user
+router.post("/", async (req, res, next) => {
+  const { first_name, last_name, email, password } = req.body;
+  const user = await User.create({ first_name, last_name, email, hashed_password });
+  return res.json(user);
+});
 module.exports = router;
