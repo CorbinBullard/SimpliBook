@@ -10,7 +10,7 @@ router.get("/", async (req, res, next) => {
 });
 
 //Get all current User's slots
-router.get("/current", async (req, res, next) => {
+router.get("/current", requireAuth, async (req, res, next) => {
   const { user } = req;
 
   if (!user) return res.json({ message: "No user found" });
@@ -19,8 +19,7 @@ router.get("/current", async (req, res, next) => {
   return res.json(slots);
 });
 
-
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", requireAuth, async (req, res, next) => {
   const { id } = req.params;
   const { user } = req;
   const slot = await Slot.findByPk(id);

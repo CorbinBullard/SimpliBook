@@ -21,12 +21,12 @@ module.exports = {
       hashed_password: {
         type: Sequelize.STRING,
       },
-      public_key: {
-        type: Sequelize.STRING,
-      },
-      hashed_key: {
-        type: Sequelize.STRING,
-      },
+      // public_key: {
+      //   type: Sequelize.STRING,
+      // },
+      // hashed_private_key: {
+      //   type: Sequelize.STRING,
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
