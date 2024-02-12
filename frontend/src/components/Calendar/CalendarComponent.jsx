@@ -2,38 +2,12 @@ import React, { useEffect, useReducer, useState } from "react";
 import { Calendar, Badge } from "antd";
 import { list } from "postcss";
 import * as dayjs from "dayjs";
-export default function CalendarComponent() {
-  const [date, setDate] = useState(null);
-  const [bookings, setBookings] = useState({});
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/api/bookings");
-      const data = await response.json();
-      const bookingsObj = {};
-      console.log(data);
-      data.bookings.forEach((booking) => {
-        booking.time = dayjs(booking.date).format("h:mm a");
-        const date = dayjs(bookings.date).format("YYYY-MM-DD");
-        if (bookingsObj[date]) {
-          bookingsObj[date].push(booking);
-        } else {
-          bookingsObj[date] = [booking];
-        }
-      });
-      setBookings(bookingsObj);
-    };
-    fetchData();
-  }, []);
-
+export default function CalendarComponent({ bookings, setDate }) {
   const onPanelChange = (value, mode) => {
     // console.log(value.format("YYYY-MM-DD"), mode);
   };
-  console.log("BOOKINGS: ", bookings);
   const onSelect = (value) => {
-    // console.log(value.format("YYYY-MM-DD"));
     setDate(value.format("YYYY-MM-DD"));
-    // console.log(date);
   };
 
   const getListData = (value) => {
@@ -63,9 +37,15 @@ export default function CalendarComponent() {
       </ul>
     );
   };
-
+  const monthCellRender = (value) => {
+    const num = getListData(value).length;
+    return num ? (
+      <div className="notes-month">
+        <section>{num} Bookings</section>
+      </div>
+    ) : null;
+  };
   const cellRender = (current, info) => {
-    // console.log("CELL RENDER",info)
     if (info.type === "date") return dateCellRender(current);
     if (info.type === "month") return monthCellRender(current);
     return info.originNode;
@@ -73,10 +53,11 @@ export default function CalendarComponent() {
 
   return (
     <Calendar
+    style={{minWidth: "600px"}}
       onSelect={onSelect}
       onPanelChange={onPanelChange}
       cellRender={cellRender}
-      mode="month" // Year will error right now
+      // mode="month" // Year will error right now
     />
   );
 }
