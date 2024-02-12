@@ -40,6 +40,8 @@ router.get("/", (req, res) => {
 router.post("/", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
 
+  console.log("CREDENTIAL", credential);
+
   const data = await User.unscoped().findOne({
     where: {
       email: credential,

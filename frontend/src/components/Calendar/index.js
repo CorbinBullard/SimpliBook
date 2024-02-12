@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router";
 import * as dayjs from "dayjs";
 import { Layout } from "antd";
-import CalendarComponent from "../components/Calendar/CalendarComponent";
-import BookingsDetails from "../components/Calendar/BookingsDetails";
+import CalendarComponent from "./CalendarComponent";
+import BookingsDetails from "./BookingsDetails";
 
 const { Sider, Content } = Layout;
 export default function CalendarPage() {
   const [date, setDate] = useState(null);
   const [bookings, setBookings] = useState({});
   const [slots, setSlots] = useState([]);
+  const navigate = useNavigate();
 
   // Fetch bookings from the server
   useEffect(() => {
@@ -31,16 +32,7 @@ export default function CalendarPage() {
     };
     fetchData();
   }, []);
-  // Fetch slots from the server
-  // useEffect(() => {
-  //   const fetchSlots = async () => {
-  //     const response = await fetch("/api/slots");
-  //     const data = await response.json();
-  //     setSlots(data.slots);
-  //   };
-  //   fetchSlots();
-  // }, []);
-  console.log('bookings', bookings)
+
   const createNewBooking = (booking) => {};
   return (
     <Layout>
@@ -48,7 +40,7 @@ export default function CalendarPage() {
         <CalendarComponent bookings={bookings} setDate={setDate} />
       </Content>
       {date && (
-        <Sider style={{ background: "#fff", paddingLeft: "3rem" }} width={300}>
+        <Sider style={{ background: "#fff", paddingLeft: "1rem" }} width={300}>
           <BookingsDetails
             date={date}
             bookings={bookings[date]}
