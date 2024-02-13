@@ -11,6 +11,7 @@ module.exports = {
       },
       service_type_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "ServiceTypes",
           key: "id",
@@ -18,6 +19,7 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "Users",
           key: "id",
@@ -25,12 +27,15 @@ module.exports = {
       },
       day: {
         type: Sequelize.INTEGER,
+        allowNull: false,
       },
       start_time: {
         type: Sequelize.TIME,
+        allowNull: false,
       },
       end_time: {
         type: Sequelize.TIME,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

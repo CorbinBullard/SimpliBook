@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Modal, Space } from "antd";
+import { Card, Form, Modal, Space } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import * as dayjs from "dayjs";
@@ -7,14 +7,7 @@ import BookingForm from "./BookingForm";
 export default function BookingsDetails({ bookings, date, createNewBooking }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [slots, setSlots] = useState([]);
-  const [bookingForm, setBookingForm] = useState({
-    name: "",
-    email: "",
-    time: "",
-    number: "",
-    paid: false,
-    persons: 1,
-  });
+  const [form] = Form.useForm();
   // Fetch slots from the server
   useEffect(() => {
     const fetchSlots = async () => {
@@ -40,13 +33,13 @@ export default function BookingsDetails({ bookings, date, createNewBooking }) {
   };
 
   return (
-    <Space direction="vertical" className="pl-5 w-[100%]">
-      <Card title={dayjs(date).format("dddd, MMM D")}>
+    <Space direction="vertical" style={{width:"100%"}}>
+      <Card title={dayjs(date).format("dddd, MMM D")} >
         {bookings &&
           bookings.map((booking) => (
             <BookingCard booking={booking} key={booking.id} />
           ))}
-        <Button type="default" block onClick={showModal}>
+        <Button type="default" block onClick={showModal} style={{marginTop: ".5rem"}}>
           Add Booking
         </Button>
       </Card>
@@ -57,10 +50,7 @@ export default function BookingsDetails({ bookings, date, createNewBooking }) {
         onCancel={handleCancel}
       >
         <BookingForm
-          date={date}
-          form={bookingForm}
-          setForm={setBookingForm}
-          handleSubmit={handleSubmit}
+          form={form}
           slots={slots}
         />
       </Modal>

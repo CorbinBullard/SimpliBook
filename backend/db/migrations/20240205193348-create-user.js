@@ -11,15 +11,19 @@ module.exports = {
       },
       first_name: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       last_name: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       hashed_password: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       // public_key: {
       //   type: Sequelize.STRING,

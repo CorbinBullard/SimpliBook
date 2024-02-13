@@ -1,5 +1,4 @@
 import logo from "./logo.svg";
-import "./App.css";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
@@ -15,7 +14,7 @@ import { Layout, Menu, theme, Drawer } from "antd";
 import CalendarPage from "./components/Calendar";
 import DashBoard from "./pages/DashBoard";
 import DemoPage from "./pages/DemoPage";
-import UserServices from "./components/UserServices";
+import UserServices from "./components/Services";
 
 const { Header, Content, Footer, Sider } = Layout;
 

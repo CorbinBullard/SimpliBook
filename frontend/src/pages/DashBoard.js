@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import CalendarPage from "../components/Calendar";
-import UserServices from "../components/UserServices";
 import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
+import CalendarPage from "../components/Calendar";
+import UserServices from "../components/Services";
+import {
   UserOutlined,
   CalendarOutlined,
+  BarsOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme, Drawer } from "antd";
 
@@ -23,11 +27,13 @@ function getItem(label, key, icon, children) {
   };
 }
 const items = [
-  getItem("User", "user", <UserOutlined />, [getItem("My Services", "services")]),
+  getItem("User", "user", <UserOutlined />, []),
+  getItem("My Services", "services", <BarsOutlined />),
   getItem("Calendar", "", <CalendarOutlined />),
 ];
 
 export default function DashBoard({ session }) {
+  const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -47,7 +53,7 @@ export default function DashBoard({ session }) {
     console.log("NAVIGATE", e);
     navigate(e.key);
   }
-
+  console.log("LOCATION", location);
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -58,14 +64,14 @@ export default function DashBoard({ session }) {
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
-          defaultSelectedKeys={["2"]}
+          defaultSelectedKeys={[`${location.pathname.split("/")[2] || ""}`]}
           mode="inline"
           items={items}
           onClick={(e) => handleNavigation(e)}
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Header style={{ padding: 0, marginBottom: "1rem", background: colorBgContainer }} />
         <Content style={{ margin: "0 16px", minWidth: "1150px" }}>
           <Outlet />
         </Content>

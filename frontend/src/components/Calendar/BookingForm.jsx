@@ -14,37 +14,26 @@ const formTypes = {
   paid: "checkbox",
 };
 
-export default function BookingForm({ date, form, setForm, slots }) {
+export default function BookingForm({ date, form, slots }) {
   console.log("Slots", slots);
   return (
-    <Form>
-      <Space.Compact direction="vertical" style={{ display: "flex" }} className="">
-        {Object.keys(form).map((key) => {
-          return (
-            <Item key={key}>
-                <label htmlFor="">{capitalize(key)}</label>
-              {formTypes[key] === "select" ? (
-                <Select>
-                  {slots.map((slot) => (
-                    <Option value={slot.id} placeholder={capitalize(key)}>
-                      {dayjs(`${date}${slot.start_time}`).format("h:mm a")}
-                    </Option>
-                  ))}
-                </Select>
-              ) : (
-                <Input
-                  placeholder={capitalize(key)}
-                  type={formTypes[key]}
-                  value={form[key]}
-                  onChange={(e) => {
-                    setForm({ ...form, [key]: e.target.value });
-                  }}
-                />
-              )}
-            </Item>
-          );
-        })}
-      </Space.Compact>
+    <Form form={form}>
+      <Item label="Name" rules={[{ required: true }]} name="name">
+        <Input />
+      </Item>
+      <Item label="Email" rules={[{ required: true }]} name="email">
+        <Input type="email" />
+      </Item>
+      <Item label="Time" rules={[{ required: true }]} name="time">
+        <Select>
+          {slots.map((slot) => (
+            <Option value={slot.id} placeholder="Time">
+              {dayjs(`${date}${slot.start_time}`).format("h:mm a")}
+            </Option>
+          ))}
+        </Select>
+      </Item>
     </Form>
   );
 }
+
