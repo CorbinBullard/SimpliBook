@@ -45,7 +45,7 @@ router.put("/:id", requireAuth, async (req, res) => {
     capacity,
     duration,
   });
-  
+
   return res.json(updatedServiceType);
 });
 
@@ -70,6 +70,7 @@ router.get("/:id/slots", requireAuth, async (req, res, next) => {
   });
   return res.json(slots);
 });
+//Create a slot for a specific service type
 router.post("/:id/slots", requireAuth, validateTime, async (req, res, next) => {
   const { user } = req;
   const { id } = req.params;

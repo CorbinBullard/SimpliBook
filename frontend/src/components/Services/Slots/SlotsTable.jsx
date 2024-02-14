@@ -1,0 +1,147 @@
+import React, { useEffect, useState } from "react";
+import { Button, Form, Modal, Space, Table, Tree } from "antd";
+import dayjs from "dayjs";
+// import DayTimeline from "../DayTimeline";
+import {
+  CalendarOutlined,
+  ClockCircleOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
+import SlotForm from "./SlotForm";
+import { useFetchData } from "../../../utils/FetchData";
+import { checkTimeConflict } from "../../../utils/utilFunctions";
+
+export default function SlotsTable({ service }) {
+  const [slots, setSlots] = useState([]);
+  const [data, setData] = useState({ service_type_id: service.id });
+  const [selectedNodes, setSelectedNodes] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    const fetchSlots = async () => {
+      const response = await fetch(`/api/services/${service.id}/slots`);
+      const data = await response.json();
+      setSlots(data);
+    };
+    fetchSlots();
+  }, []);
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const treeData = days.map((day, index) => {
+    return {
+      value: index,
+      title: day,
+      selectable: false,
+      children: [
+        ...slots
+          .filter((slot) => slot.day === index)
+          .map((slot) => {
+            return {
+              selectable: false,
+              value: slot.id,
+              icon: <ClockCircleOutlined />,
+              title: dayjs(`2024-03-12T${slot.start_time}`).format("h:mm a"),
+            };
+          }),
+        {
+          title: "Add Slot",
+          icon: <PlusCircleOutlined />,
+          key: index,
+        },
+      ],
+    };
+  });
+  const handleSelect = (selectedKeys, info) => {
+    setSelectedNodes(selectedKeys);
+    setData({ ...data, day: info.node.key });
+    setIsModalOpen(true);
+  };
+  const handleSubmit = () => {
+    form.validateFields().then((values) => {
+      const time = values.start_time.format("HH:mm:ss");
+      const endTime = dayjs(values.start_time)
+        .add(service.duration, "minute")
+        .format("HH:mm:ss");
+      console.log("End Time", endTime);
+      const newSlot = {
+        ...values,
+        start_time: time,
+        end_time: endTime,
+        service_type_id: service.id,
+      };
+      // Check for conflicting times with the other slots
+      if (checkTimeConflict(time, service.duration, slots)) {
+        form.setFields([
+          {
+            name: "start_time",
+            errors: ["Time conflict with other slots"],
+          },
+        ]);
+        return;
+      }
+
+      fetch(`/api/services/${service.id}/slots`, {
+        method: "POST",
+        body: JSON.stringify(newSlot),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setSlots([...slots, data]);
+          form.resetFields();
+          setIsModalOpen(false);
+        });
+    });
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <Tree
+        // selectable={false}
+        style={{ width: "100%" }}
+        showIcon
+        onSelect={handleSelect}
+        treeData={[
+          {
+            selectable: false,
+            title: "Schedule",
+            value: "",
+            icon: <CalendarOutlined />,
+            children: treeData,
+          },
+        ]}
+      />
+
+      <Modal
+        title="New Slot"
+        selectedNodes={selectedNodes}
+        open={isModalOpen}
+        onOk={handleSubmit}
+        onCancel={handleCancel}
+        okText="Create Slot"
+        okType="primary"
+      >
+        <SlotForm
+          form={form}
+          days={days}
+          data={data}
+          slots={slots}
+          duration={service.duration}
+        />
+      </Modal>
+    </>
+  );
+}

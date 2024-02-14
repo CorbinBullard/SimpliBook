@@ -1,92 +1,71 @@
 import React, { useEffect, useReducer, useState } from "react";
-import SlotsTable from "./SlotsTable"; // Assuming you're using it elsewhere
-import ServiceCard from "./ServiceCard";
-import { Button, Card, Col, Empty, Form, Modal, Row } from "antd";
+import { servicesReducer, actionTypes } from "./servicesReducer";
+import { useFetchData } from "../../utils/FetchData";
+import { Button, Card, Col, Form, Modal, Row } from "antd";
 import ServiceForm from "./ServiceForm";
-
-// Define action types
-const actionTypes = {
-  SET_SERVICES: "SET_SERVICES",
-  CREATE_SERVICE: "CREATE_SERVICE",
-};
-
-// Define reducer function
-const servicesReducer = (state, action) => {
-  switch (action.type) {
-    case actionTypes.SET_SERVICES:
-      return action.payload;
-    case actionTypes.CREATE_SERVICE:
-      return [...state, action.payload];
-    default:
-      return state;
-  }
-};
+import ServiceCard from "./ServiceCard";
+import { convertToMinutes } from "../../utils/utilFunctions";
+import { useForm } from "antd/lib/form/Form";
 
 export default function UserServices() {
   const [services, dispatchServices] = useReducer(servicesReducer, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form] = Form.useForm();
-  const [slots, setSlots] = useState([]);
+  const [form] = useForm();
+  const slots = useFetchData("/api/slots");
 
+  // Assuming /api/services returns an array
+  const fetchedServices = useFetchData("/api/services");
   useEffect(() => {
-    fetch("/api/slots")
-      .then((res) => res.json())
-      .then((data) => setSlots(data));
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/services")
-      .then((res) => res.json())
-      .then((data) =>
-        dispatchServices({ type: actionTypes.SET_SERVICES, payload: data })
-      );
-  }, []);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleSubmit = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        values.duration = convertToMinutes(values.duration.format("HH:mm"));
-        console.log("Values : ", values);
-        fetch("/api/services", {
-          method: "POST",
-          body: JSON.stringify(values),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            dispatchServices({
-              type: actionTypes.CREATE_SERVICE,
-              payload: data,
-            });
-            // form.resetFields();
-          });
-        setIsModalOpen(false);
-      })
-      .catch((error) => {
-        console.log("Error : ", error);
+    if (fetchedServices) {
+      dispatchServices({
+        type: actionTypes.SET_SERVICES,
+        payload: fetchedServices,
       });
+    }
+  }, [fetchedServices]);
+
+  const showModal = () => setIsModalOpen(true);
+  const handleCancel = () => setIsModalOpen(false);
+
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      values.duration = convertToMinutes(values.duration.format("HH:mm"));
+      const response = await fetch("/api/services", {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await response.json();
+      dispatchServices({ type: actionTypes.CREATE_SERVICE, payload: data });
+      form.resetFields();
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error : ", error);
+    }
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const handleUpdate = (service) =>
+    dispatchServices({ type: actionTypes.UPDATE_SERVICE, payload: service });
+  const handleDelete = async (id) => {
+    await fetch(`/api/services/${id}`, { method: "DELETE" });
+    dispatchServices({ type: actionTypes.DELETE_SERVICE, payload: id });
   };
 
   return (
     <div className="pt-5">
       <Row gutter={16}>
         {services.length > 0 &&
-          services.map((service, index) => (
-            <ServiceCard key={index} service={service} />
+          services.map((service) => (
+            <ServiceCard
+              key={service.id}
+              service={service}
+              update={handleUpdate}
+              handleDelete={() => handleDelete(service.id)}
+            />
           ))}
         <Col span={6}>
-          <Card title={"Create New Service"} style={{ height: "14.1rem" }}>
+          <Card title="Create New Service" style={{ height: "14.1rem" }}>
             <Button
               type="dashed"
               block
@@ -111,8 +90,3 @@ export default function UserServices() {
     </div>
   );
 }
-// convert HH:mm to minutes as an integer
-const convertToMinutes = (time) => {
-  const [hours, minutes] = time.split(":");
-  return parseInt(hours) * 60 + parseInt(minutes);
-};
