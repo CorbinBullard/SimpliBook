@@ -14,10 +14,10 @@ export default function SlotForm({ form, data, days, slots, duration }) {
   }, [data]);
 
   const checkTime = (time) => {
-    const endTime = dayjs(time).add(duration, "minute");
+    const endTime = dayjs(time).add(duration, "minute").format("HH:mm:ss");
     const isConflicting = checkTimeConflict(
       dayjs(time).format("HH:mm:ss"),
-      duration,
+      endTime,
       slots
     );
     setConflicting(isConflicting);

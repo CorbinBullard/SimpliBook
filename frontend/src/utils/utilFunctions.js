@@ -18,6 +18,7 @@ export function checkTimeConflict(start_time, end_time, timeSlotsArray) {
       (start_time >= slot.start_time && start_time <= slot.end_time) ||
       (end_time >= slot.start_time && end_time <= slot.end_time)
     )
+    console.log("SLOT: ", slot.start_time, slot.end_time,"\nNew Slot : ",  start_time, end_time);
       return true;
   }
   return false;

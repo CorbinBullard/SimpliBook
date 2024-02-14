@@ -50,10 +50,8 @@ export default function DashBoard({ session }) {
   }, [session, navigate]);
 
   function handleNavigation(e) {
-    console.log("NAVIGATE", e);
     navigate(e.key);
   }
-  console.log("LOCATION", location);
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider

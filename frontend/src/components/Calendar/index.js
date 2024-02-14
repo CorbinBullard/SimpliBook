@@ -1,37 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router";
 import * as dayjs from "dayjs";
 import { Layout } from "antd";
 import CalendarComponent from "./CalendarComponent";
-import BookingsDetails from "./BookingsDetails";
-
+import DateDetails from "./DateDetails";
+import { useFetchData } from "../../utils/FetchData";
+import { BookingsReducer, actionTypes } from "./Bookings/BookingsReducer";
+import {
+  ScheduleComponent,
+  Day,
+  Week,
+  WorkWeek,
+  Month,
+  Agenda,
+  Inject,
+} from "@syncfusion/ej2-react-schedule";
 const { Sider, Content } = Layout;
 export default function CalendarPage() {
-  const [date, setDate] = useState(null);
-  const [bookings, setBookings] = useState({});
-  const [slots, setSlots] = useState([]);
+  const [date, setDate] = useState(Date.now());
+  const [bookings, dispatchBookings] = useReducer(BookingsReducer, {});
   const navigate = useNavigate();
 
   // Fetch bookings from the server
+  const fetchedBookings = useFetchData("/api/bookings");
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/api/bookings");
-      const data = await response.json();
-      const bookingsObj = {};
-      console.log(data);
-      data.bookings.forEach((booking) => {
-        booking.time = dayjs(booking.date).format("h:mm a");
-        const date = dayjs(bookings.date).format("YYYY-MM-DD");
-        if (bookingsObj[date]) {
-          bookingsObj[date].push(booking);
-        } else {
-          bookingsObj[date] = [booking];
-        }
+    if (fetchedBookings) {
+      dispatchBookings({
+        type: actionTypes.SET_BOOKINGS,
+        payload: fetchedBookings,
       });
-      setBookings(bookingsObj);
-    };
-    fetchData();
-  }, []);
+    }
+  }, [fetchedBookings]);
+  console.log("Bookings", bookings);
 
   const createNewBooking = (booking) => {};
   return (
@@ -39,15 +39,14 @@ export default function CalendarPage() {
       <Content>
         <CalendarComponent bookings={bookings} setDate={setDate} />
       </Content>
-      {date && (
-        <Sider style={{ background: "#fff", paddingLeft: "1rem" }} width={300}>
-          <BookingsDetails
-            date={date}
-            bookings={bookings[date]}
-            createNewBooking={createNewBooking}
-          />
-        </Sider>
-      )}
+
+      <Sider style={{ paddingLeft: "1rem", background: "#fff" }} width={300}>
+        <DateDetails
+          date={date}
+          bookings={bookings[date]}
+          createNewBooking={createNewBooking}
+        />
+      </Sider>
     </Layout>
   );
 }

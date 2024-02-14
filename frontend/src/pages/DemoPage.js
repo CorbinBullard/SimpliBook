@@ -3,11 +3,9 @@ import { useNavigate } from "react-router";
 
 export default function DemoPage({ session }) {
   const navigate = useNavigate();
-  console.log("DEMO PAGE SESSION ", session);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("You clicked submit.");
     fetch("/api/session", {
       method: "POST",
       headers: {

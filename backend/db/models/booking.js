@@ -11,12 +11,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Booking.belongsTo(models.Slot, {
         foreignKey: "slot_id",
-        as: "slot",
+        // as: "slot",
+      });
+      Booking.belongsTo(models.User, {
+        foreignKey: "user_id",
+        // as: "user",
       });
     }
   }
   Booking.init(
     {
+      user_id: DataTypes.INTEGER,
       slot_id: DataTypes.INTEGER,
       recurring: DataTypes.BOOLEAN,
       name: DataTypes.STRING,

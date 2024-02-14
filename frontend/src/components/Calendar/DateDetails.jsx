@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Card, Form, Modal, Space } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import * as dayjs from "dayjs";
-import BookingForm from "./BookingForm";
-export default function BookingsDetails({ bookings, date, createNewBooking }) {
+import BookingForm from "./Bookings/BookingForm";
+export default function DateDetails({ bookings, date }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [slots, setSlots] = useState([]);
   const [form] = Form.useForm();
+
   // Fetch slots from the server
   useEffect(() => {
     const fetchSlots = async () => {
@@ -19,7 +20,9 @@ export default function BookingsDetails({ bookings, date, createNewBooking }) {
     };
     fetchSlots();
   }, [date]);
-  console.log("Slots", slots);
+
+  useMemo(() => {}, [bookings]);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -33,27 +36,32 @@ export default function BookingsDetails({ bookings, date, createNewBooking }) {
   };
 
   return (
-    <Space direction="vertical" style={{width:"100%"}}>
-      <Card title={dayjs(date).format("dddd, MMM D")} >
+    <Space direction="vertical" style={{ width: "100%" }}>
+      <Card title={dayjs(date).format("dddd, MMM D")}>
         {bookings &&
           bookings.map((booking) => (
             <BookingCard booking={booking} key={booking.id} />
           ))}
-        <Button type="default" block onClick={showModal} style={{marginTop: ".5rem"}}>
+
+        {/* <Button
+          type="default"
+          block
+          onClick={showModal}
+          style={{ marginTop: ".5rem" }}
+        >
           Add Booking
-        </Button>
+        </Button> */}
       </Card>
-      <Modal
+      {/* <Modal
         title="New Booking"
         open={isModalOpen}
         onOk={handleSubmit}
         onCancel={handleCancel}
+        okText="Create Booking"
+        okType="primary"
       >
-        <BookingForm
-          form={form}
-          slots={slots}
-        />
-      </Modal>
+        <BookingForm form={form} slots={slots} />
+      </Modal> */}
     </Space>
   );
 }

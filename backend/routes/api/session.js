@@ -40,16 +40,12 @@ router.get("/", (req, res) => {
 router.post("/", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
 
-  console.log("CREDENTIAL", credential);
-
   const data = await User.unscoped().findOne({
     where: {
       email: credential,
     },
   });
   const user = data.toJSON();
-
-  console.log(user);
 
   if (!user || !bcrypt.compareSync(password, user.hashed_password.toString())) {
     const err = new Error("Login failed");

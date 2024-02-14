@@ -1,6 +1,5 @@
 const validateTime = (req, res, next) => {
   const { start_time, end_time } = req.body;
-  console.log("CHECKING TIME")
   const start = new Date(`01/01/2000 ${start_time}`);
   const end = new Date(`01/01/2000 ${end_time}`);
   if (start >= end) {

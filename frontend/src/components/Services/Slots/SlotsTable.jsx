@@ -138,7 +138,7 @@ export default function SlotsTable({ service }) {
           form={form}
           days={days}
           data={data}
-          slots={slots}
+          slots={slots.filter((slot) => slot.day === data.day)}
           duration={service.duration}
         />
       </Modal>

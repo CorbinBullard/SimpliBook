@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       ServiceType.belongsTo(models.User, {
         foreignKey: "user_id",
-        as: "user",
+        // as: "user",
       });
       ServiceType.hasMany(models.Slot, {
         foreignKey: "service_type_id",
-        as: "slots",
+        // as: "slots",
       });
     }
   }

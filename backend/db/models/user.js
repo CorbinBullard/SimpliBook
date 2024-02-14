@@ -11,7 +11,15 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasMany(models.ServiceType, {
         foreignKey: "user_id",
-        as: "services",
+        // as: "services",
+      });
+      User.hasMany(models.Slot, {
+        foreignKey: "user_id",
+        // as: "slots",
+      });
+      User.hasMany(models.Booking, {
+        foreignKey: "user_id",
+        // as: "bookings",
       });
     }
   }

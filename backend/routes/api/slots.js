@@ -14,13 +14,16 @@ router.get("/", async (req, res, next) => {
   const { user } = req;
   const { date } = req.query;
 
-
   if (!user) return res.json({ message: "No user found" });
 
-
-
+  const where = {
+    user_id: user.toJSON().id
+  }
+  if (date) {
+    where.day = date;
+  }
   const slots = await Slot.findAll({
-    where: { user_id: user.toJSON().id },
+    where,
   });
   return res.json(slots);
 });

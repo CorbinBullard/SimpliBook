@@ -5,14 +5,21 @@ const { bookingCheck } = require("../../utils/bookingCheck.js");
 const { ServiceType } = require("../../db/models");
 
 router.get("/", async (req, res, next) => {
-  const bookings = await Booking.findAll();
+  const { user } = req;
+  if (!user) return res.json({ message: "No user found" });
+  const bookings = await Booking.findAll({
+    where: { user_id: user.toJSON().id },
+  });
+
   return res.json({ bookings });
 });
 
 router.post("/", async (req, res, next) => {
   //TODO: make sure that the users key is checked
-
+  const { user } = req;
   const { date, slot_id } = req.body;
+  if (!user) return res.json({ message: "No user found" });
+
   const slot = await Slot.findByPk(slot_id, {
     include: [{ model: ServiceType }],
   });
@@ -27,10 +34,9 @@ router.post("/", async (req, res, next) => {
       date,
     },
   });
-  
+
   if (conflictingBookings.length) {
     bookingsJSON = conflictingBookings.map((booking) => booking.toJSON());
-    console.log(bookingsJSON);
     const currentCapacity = bookingsJSON.reduce(
       (acc, curr) => (acc += curr.persons),
       0
@@ -40,7 +46,8 @@ router.post("/", async (req, res, next) => {
   }
 
   const newBooking = {
-    slot_id,
+    user_id: user.toJSON().id,
+    slot: slot_id,
     date,
     ...req.body,
     // FAKE NAME
