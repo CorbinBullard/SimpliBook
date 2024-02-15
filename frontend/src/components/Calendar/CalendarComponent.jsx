@@ -4,7 +4,7 @@ import { list } from "postcss";
 import * as dayjs from "dayjs";
 export default function CalendarComponent({ bookings, setDate }) {
   const onPanelChange = (value, mode) => {
-    // console.log(value.format("YYYY-MM-DD"), mode);
+
   };
   const onSelect = (value) => {
     setDate(value.format("YYYY-MM-DD"));

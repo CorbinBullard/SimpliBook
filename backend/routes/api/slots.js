@@ -1,7 +1,8 @@
 const express = require("express");
-const { Slot } = require("../../db/models");
+const { Slot, ServiceType } = require("../../db/models");
 const { validateTime } = require("../../utils/dateTimeValidators");
 const { requireAuth } = require("../../utils/auth");
+
 const router = express.Router();
 
 // router.get("/", async (req, res, next) => {
@@ -17,8 +18,8 @@ router.get("/", async (req, res, next) => {
   if (!user) return res.json({ message: "No user found" });
 
   const where = {
-    user_id: user.toJSON().id
-  }
+    user_id: user.toJSON().id,
+  };
   if (date) {
     where.day = date;
   }

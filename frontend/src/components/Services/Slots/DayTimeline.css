@@ -1,0 +1,36 @@
+.day-timeline-card {
+  width: 100%;
+  overflow: auto;
+  height: 49rem;
+}
+
+.timeline-container {
+  position: relative;
+  height: 1440px; /* 24 hours * 60px */
+  border-left: 2px solid #ddd;
+}
+
+.slot {
+  position: absolute;
+  width: 10rem;
+  right: 0;
+  background-color: #1890ff;
+  color: white;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #108ee9;
+}
+
+.time-labels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+}
+
+.time-label {
+  height: 60px; /* Matching the hour block height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -3,6 +3,7 @@ const { Booking, Slot } = require("../../db/models");
 const router = express.Router();
 const { bookingCheck } = require("../../utils/bookingCheck.js");
 const { ServiceType } = require("../../db/models");
+const { Op } = require("sequelize");
 
 router.get("/", async (req, res, next) => {
   const { user } = req;
@@ -68,6 +69,17 @@ router.delete("/:id", async (req, res, next) => {
   if (!booking) return res.json({ message: "Booking not found" });
   await booking.destroy();
   return res.json({ message: "successfully deleted" });
+});
+
+router.get("/:date/date", async (req, res, next) => {
+  const { user } = req;
+  if (!user) return res.json({ message: "No user found" });
+  const { date } = req.params;
+  const bookings = await Booking.findAll({
+    where: { user_id: user.toJSON().id, date: { [Op.substring]: date } },
+    include: [{ model: Slot, include: [{ model: ServiceType }] }],
+  });
+  return res.json(bookings);
 });
 
 module.exports = router;
