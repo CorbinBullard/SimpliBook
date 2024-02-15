@@ -1,0 +1,6 @@
+.schedule-slot {
+    opacity: .5;
+}
+.schedule-slot:hover {
+  opacity: .8;
+}

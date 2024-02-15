@@ -86,10 +86,9 @@ router.post("/:id/slots", requireAuth, validateTime, async (req, res, next) => {
   });
   for (const slot of slots) {
     if (
-      (start_time >= slot.toJSON().start_time &&
-        start_time <= slot.toJSON().end_time) ||
-      (end_time >= slot.toJSON().start_time &&
-        end_time <= slot.toJSON().end_time)
+      (start_time > slot.toJSON().start_time &&
+        start_time < slot.toJSON().end_time) ||
+      (end_time > slot.toJSON().start_time && end_time < slot.toJSON().end_time)
     )
       return res.json({ message: "Time conflict" });
   }

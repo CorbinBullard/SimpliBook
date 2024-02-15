@@ -67,41 +67,36 @@ export default function SlotsTable({ service }) {
     setIsModalOpen(true);
   };
   const handleSubmit = () => {
-    form.validateFields().then((values) => {
-      const time = values.start_time.format("HH:mm:ss");
-      const endTime = dayjs(values.start_time)
-        .add(service.duration, "minute")
-        .format("HH:mm:ss");
-      console.log("End Time", endTime);
-      const newSlot = {
-        ...values,
-        start_time: time,
-        end_time: endTime,
-        service_type_id: service.id,
-      };
-      // Check for conflicting times with the other slots
-      if (checkTimeConflict(time, service.duration, slots)) {
-        form.setFields([
-          {
-            name: "start_time",
-            errors: ["Time conflict with other slots"],
-          },
-        ]);
-        return;
-      }
-
-      fetch(`/api/services/${service.id}/slots`, {
-        method: "POST",
-        body: JSON.stringify(newSlot),
-        headers: { "Content-Type": "application/json" },
+    form
+      .validateFields()
+      .then((values) => {
+        console.log("Values", values);
+        const newSlot = {
+          ...values,
+          service_type_id: service.id,
+          start_time: dayjs(values.start_time).format("HH:mm:ss"),
+          end_time: dayjs(values.start_time, "HH:mm:ss")
+            .add(service.duration, "minute")
+            .format("HH:mm:ss"),
+        };
+        console.log("New Slot", newSlot);
+        fetch(`/api/services/${service.id}/slots`, {
+          method: "POST",
+          body: JSON.stringify(newSlot),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setSlots([...slots, data]);
+            form.resetFields();
+            setIsModalOpen(false);
+          });
       })
-        .then((response) => response.json())
-        .then((data) => {
-          setSlots([...slots, data]);
-          form.resetFields();
-          setIsModalOpen(false);
-        });
-    });
+      .catch((error) => {
+        return;
+      });
+
+    return;
   };
   const handleCancel = () => {
     setIsModalOpen(false);

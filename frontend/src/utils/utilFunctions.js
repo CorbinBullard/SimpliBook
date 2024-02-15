@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 // Capitolize the first letter of a string
 export const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -13,13 +15,23 @@ export const convertToMinutes = (time) => {
 };
 
 export function checkTimeConflict(start_time, end_time, timeSlotsArray) {
+  console.log("times: ", start_time, end_time);
+  const [start, end] = [
+    +dayjs(start_time, "HH:mm:ss").format("HHmm"),
+    +dayjs(end_time, "HH:mm:ss").format("HHmm"),
+  ];
+  console.log("TIMES ", start, end);
   for (const slot of timeSlotsArray) {
-    if (
-      (start_time >= slot.start_time && start_time <= slot.end_time) ||
-      (end_time >= slot.start_time && end_time <= slot.end_time)
-    )
-    console.log("SLOT: ", slot.start_time, slot.end_time,"\nNew Slot : ",  start_time, end_time);
+    const { start_time, end_time } = slot;
+    const slotStart = +dayjs(start_time, "HH:mm:ss").format("HHmm");
+    const slotEnd = +dayjs(end_time, "HH:mm:ss").format("HHmm");
+    console.log("SLOT: ", slotStart, slotEnd, "\nNew Slot : ", start, end);
+
+    if (start < slotEnd && slotStart < end) {
       return true;
+    }
   }
+  console.log("NO CONFLICT: RETURN FALSE");
+
   return false;
 }

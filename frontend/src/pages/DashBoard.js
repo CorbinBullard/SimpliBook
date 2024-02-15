@@ -13,6 +13,7 @@ import {
   UserOutlined,
   CalendarOutlined,
   BarsOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme, Drawer } from "antd";
 
@@ -29,6 +30,7 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("User", "user", <UserOutlined />, []),
   getItem("My Services", "services", <BarsOutlined />),
+  getItem("Schedule", "schedule", <ScheduleOutlined />),
   getItem("Calendar", "", <CalendarOutlined />),
 ];
 
@@ -53,7 +55,7 @@ export default function DashBoard({ session }) {
     navigate(e.key);
   }
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ maxHeight: "100vh", minHeight:"100vh" }}>
       <Sider
         collapsible
         collapsed={collapsed}

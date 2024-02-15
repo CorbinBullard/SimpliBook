@@ -1,7 +1,6 @@
 import logo from "./logo.svg";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
 import {
   DesktopOutlined,
   FileOutlined,
@@ -15,6 +14,7 @@ import CalendarPage from "./components/Calendar";
 import DashBoard from "./pages/DashBoard";
 import DemoPage from "./pages/DemoPage";
 import UserServices from "./components/Services";
+import SchedulePage from "./components/Schedule";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -53,30 +53,6 @@ function App() {
   }, []);
 
   return (
-    // <Layout style={{ minHeight: "100vh" }}>
-    //   <Sider
-    //     collapsible
-    //     collapsed={collapsed}
-    //     onCollapse={(value) => setCollapsed(value)}
-    //   >
-    //     <div className="demo-logo-vertical" />
-    //     <Menu
-    //       theme="dark"
-    //       defaultSelectedKeys={["2"]}
-    //       mode="inline"
-    //       items={items}
-    //     />
-    //   </Sider>
-    //   <Layout>
-    //     <Header style={{ padding: 0, background: colorBgContainer }} />
-    //     <Content style={{ margin: "0 16px", minWidth: "1150px" }}>
-
-    //     </Content>
-    //     <Footer style={{ textAlign: "center" }}>
-    //       Ant Design ©{new Date().getFullYear()} Created by Ant UED
-    //     </Footer>
-    //   </Layout>
-    // </Layout>
     <>
       {!isLoading && (
         <Routes>
@@ -84,6 +60,7 @@ function App() {
           <Route path="/dashboard" element={<DashBoard session={session} />}>
             <Route index element={<CalendarPage />} />
             <Route path="services" element={<UserServices />} />
+            <Route path="schedule" element={<SchedulePage />} />
           </Route>
         </Routes>
       )}
