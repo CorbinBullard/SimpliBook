@@ -23,7 +23,6 @@ export default function CalendarPage() {
       });
     }
   }, [fetchedBookings]);
-  console.log("Bookings", bookings);
 
   const createNewBooking = (booking) => {};
   return (

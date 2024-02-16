@@ -7,8 +7,8 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import CalendarPage from "../components/Calendar";
-import UserServices from "../components/Services";
+import CalendarPage from "../components/CalendarView";
+import UserServices from "../components/ServicesView";
 import {
   UserOutlined,
   CalendarOutlined,
@@ -46,7 +46,6 @@ export default function DashBoard({ session }) {
 
   useEffect(() => {
     if (session?.user === null) {
-      console.log("NO SESSION");
       navigate("/");
     }
   }, [session, navigate]);
@@ -55,7 +54,7 @@ export default function DashBoard({ session }) {
     navigate(e.key);
   }
   return (
-    <Layout style={{ maxHeight: "100vh", minHeight:"100vh" }}>
+    <Layout style={{ maxHeight: "100vh", minHeight: "100vh" }}>
       <Sider
         collapsible
         collapsed={collapsed}
@@ -71,7 +70,13 @@ export default function DashBoard({ session }) {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, marginBottom: "1rem", background: colorBgContainer }} />
+        <Header
+          style={{
+            padding: 0,
+            marginBottom: "1rem",
+            background: colorBgContainer,
+          }}
+        />
         <Content style={{ margin: "0 16px", minWidth: "1150px" }}>
           <Outlet />
         </Content>

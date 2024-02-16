@@ -15,23 +15,18 @@ export const convertToMinutes = (time) => {
 };
 
 export function checkTimeConflict(start_time, end_time, timeSlotsArray) {
-  console.log("times: ", start_time, end_time);
   const [start, end] = [
     +dayjs(start_time, "HH:mm:ss").format("HHmm"),
     +dayjs(end_time, "HH:mm:ss").format("HHmm"),
   ];
-  console.log("TIMES ", start, end);
   for (const slot of timeSlotsArray) {
     const { start_time, end_time } = slot;
     const slotStart = +dayjs(start_time, "HH:mm:ss").format("HHmm");
     const slotEnd = +dayjs(end_time, "HH:mm:ss").format("HHmm");
-    console.log("SLOT: ", slotStart, slotEnd, "\nNew Slot : ", start, end);
 
     if (start < slotEnd && slotStart < end) {
       return true;
     }
   }
-  console.log("NO CONFLICT: RETURN FALSE");
-
   return false;
 }

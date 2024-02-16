@@ -11,7 +11,6 @@ export default function SchedulePage() {
         setSlots(data);
       });
   }, []);
-  console.log(slots);
 
   return <WeekView slots={slots} /> ;
 }

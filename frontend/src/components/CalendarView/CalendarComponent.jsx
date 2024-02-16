@@ -3,9 +3,7 @@ import { Calendar, Badge } from "antd";
 import { list } from "postcss";
 import * as dayjs from "dayjs";
 export default function CalendarComponent({ bookings, setDate }) {
-  const onPanelChange = (value, mode) => {
-
-  };
+  const onPanelChange = (value, mode) => {};
   const onSelect = (value) => {
     setDate(value.format("YYYY-MM-DD"));
   };
@@ -28,13 +26,18 @@ export default function CalendarComponent({ bookings, setDate }) {
   const dateCellRender = (value) => {
     const listData = getListData(value);
     return (
-      <ul className="events">
-        {listData.map((item) => (
-          <li key={item.content}>
-            <Badge status={item.type} text={item.content} />
-          </li>
-        ))}
-      </ul>
+      <div>
+        {listData.length ? (
+          <Badge status={listData[0].type} text={`Bookings: ${listData.length}`} />
+        ) : null}
+      </div>
+      // <ul className="events">
+      //   {listData.map((item) => (
+      //     <li key={item.content}>
+      //       <Badge status={item.type} text={item.content} />
+      //     </li>
+      //   ))}
+      // </ul>
     );
   };
   const monthCellRender = (value) => {
@@ -53,7 +56,7 @@ export default function CalendarComponent({ bookings, setDate }) {
 
   return (
     <Calendar
-    style={{minWidth: "600px"}}
+      style={{ minWidth: "600px" }}
       onSelect={onSelect}
       onPanelChange={onPanelChange}
       cellRender={cellRender}

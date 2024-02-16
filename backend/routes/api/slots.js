@@ -1,7 +1,9 @@
 const express = require("express");
-const { Slot, ServiceType } = require("../../db/models");
+const { Slot, ServiceType, Booking } = require("../../db/models");
 const { validateTime } = require("../../utils/dateTimeValidators");
 const { requireAuth } = require("../../utils/auth");
+const dayjs = require("dayjs");
+const { Op } = require("sequelize");
 
 const router = express.Router();
 
@@ -21,10 +23,19 @@ router.get("/", async (req, res, next) => {
     user_id: user.toJSON().id,
   };
   if (date) {
-    where.day = date;
+    where.day = dayjs(date).format("d");
   }
   const slots = await Slot.findAll({
     where,
+    include: [
+      {
+        model: Booking,
+        where: {
+          date: { [Op.substring]: dayjs(date).format("YYYY-MM-DD") },
+        },
+        required: false, // This makes the inclusion of bookings optional, thus including slots even if there are no bookings for the given date
+      },
+    ],
   });
   return res.json(slots);
 });
