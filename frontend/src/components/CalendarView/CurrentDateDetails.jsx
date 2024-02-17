@@ -5,7 +5,7 @@ import { Button } from "antd";
 import * as dayjs from "dayjs";
 import BookingForm from "./Bookings/BookingForm";
 import { useFetchData } from "../../utils/FetchData";
-import { DayTimeLine } from "../ScheduleView/WeekView";
+import  DayTimeLine  from "../Timeline/DailyTimeline";
 const { Panel } = Collapse;
 export default function CurrentDateDetails({ date }) {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -30,7 +30,7 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("User", "user", <UserOutlined />, []),
   getItem("My Services", "services", <BarsOutlined />),
-  getItem("Schedule", "schedule", <ScheduleOutlined />),
+  getItem("My Schedule", "schedule", <ScheduleOutlined />),
   getItem("Calendar", "", <CalendarOutlined />),
 ];
 
