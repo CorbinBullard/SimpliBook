@@ -2,7 +2,9 @@ import dayjs from "dayjs";
 import React, { useEffect, useMemo, useState } from "react";
 import "./WeekView.css";
 import { daysOfWeek } from "../../utils/constants";
-import { Card, Drawer } from "antd";
+import { Button, Card, Drawer } from "antd";
+import BookingCard from "../Bookings/BookingCard";
+import BookingForm from "../Bookings/BookingForm";
 const hoursOfDay = Array.from({ length: 24 }, (_, i) =>
   `${i}:00`.padStart(5, "0")
 );
@@ -86,6 +88,7 @@ export default function DayTimeLine({ slots, day, i, date }) {
                 top={top}
                 height={height}
                 bookings={slot.Bookings}
+                date={date}
               />
             );
           })}
@@ -93,13 +96,20 @@ export default function DayTimeLine({ slots, day, i, date }) {
   );
 }
 
-export function ScheduleSlot({ slot, top, height, bookings }) {
+// need a way to determine if this is availability view or calendar view
+export function ScheduleSlot({ slot, top, height, bookings, date, view }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [childDrawerOpen, setChildDrawerOpen] = useState(false);
+
   const handleDrawerOpen = () => {
+    if (view === "availability") return;
     setDrawerOpen(true);
   };
   const handleDrawerClose = () => {
     setDrawerOpen(false);
+  };
+  const handleChildDrawerOpen = () => {
+    setChildDrawerOpen(true);
   };
   const style = {
     position: "absolute",
@@ -115,7 +125,7 @@ export function ScheduleSlot({ slot, top, height, bookings }) {
     cursor: "pointer",
     textAlign: "center",
   };
-  console.log("Slot: ", slot, "Bookings: ", bookings);
+
   return (
     <>
       <div
@@ -128,7 +138,13 @@ export function ScheduleSlot({ slot, top, height, bookings }) {
       </div>
       <Drawer open={drawerOpen} onClose={handleDrawerClose} placement="left">
         <Card
-          style={{ padding: "10px" }}
+          style={{
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            height: "80vh",
+            marginBottom: "1rem",
+          }}
           title={
             <p>
               {dayjs(slot.start_time, "HH:mm:ss").format("h:mm a")} -{" "}
@@ -138,14 +154,21 @@ export function ScheduleSlot({ slot, top, height, bookings }) {
           }
         >
           {bookings.map((booking) => (
-            <Card type="inner" key={booking.id} title={booking.name}>
-              <p>Email: {booking.email}</p>
-              <p>Phone: {booking.number}</p>
-              <p>Persons: {booking.persons}</p>
-              <p>{booking.paid ? "Paid" : "Not Paid"}</p>
-            </Card>
+            <BookingCard booking={booking} key={booking.id} />
           ))}
         </Card>
+        <Button block onClick={handleChildDrawerOpen}>
+          {" "}
+          Add Booking
+        </Button>
+        {/* ADD BOOKING 2nd DRAWER */}
+        <Drawer
+          open={childDrawerOpen}
+          onClose={() => setChildDrawerOpen(false)}
+          placement="left"
+        >
+          <BookingForm slot={slot} date={date} />
+        </Drawer>
       </Drawer>
     </>
   );

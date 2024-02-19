@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Select, TimePicker } from "antd";
 import dayjs from "dayjs";
-import { checkTimeConflict } from "../../../utils/utilFunctions";
+import { checkTimeConflict } from "../../utils/utilFunctions";
 
 export default function SlotForm({ form, data, days, slots, duration }) {
   const [conflicting, setConflicting] = useState(false);

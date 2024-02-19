@@ -28,16 +28,12 @@ export default function CalendarComponent({ bookings, setDate }) {
     return (
       <div>
         {listData.length ? (
-          <Badge status={listData[0].type} text={`Bookings: ${listData.length}`} />
+          <Badge
+            status={listData[0].type}
+            text={`Bookings: ${listData.length}`}
+          />
         ) : null}
       </div>
-      // <ul className="events">
-      //   {listData.map((item) => (
-      //     <li key={item.content}>
-      //       <Badge status={item.type} text={item.content} />
-      //     </li>
-      //   ))}
-      // </ul>
     );
   };
   const monthCellRender = (value) => {

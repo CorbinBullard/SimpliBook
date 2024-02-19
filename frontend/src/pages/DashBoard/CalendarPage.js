@@ -2,10 +2,13 @@ import React, { useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router";
 import * as dayjs from "dayjs";
 import { Layout } from "antd";
-import CalendarComponent from "./CalendarComponent";
-import CurrentDateDetails from "./CurrentDateDetails";
+import CalendarComponent from "../../components/Calendar/CalendarComponent";
+import CurrentDateDetails from "../../components/Calendar/CurrentDateDetails";
 import { useFetchData } from "../../utils/FetchData";
-import { BookingsReducer, actionTypes } from "./Bookings/BookingsReducer";
+import {
+  BookingsReducer,
+  actionTypes,
+} from "../../components/Reducers/BookingsReducer";
 
 const { Sider, Content } = Layout;
 export default function CalendarPage() {
@@ -37,7 +40,6 @@ export default function CalendarPage() {
           bookings={bookings[date]}
           createNewBooking={createNewBooking}
         />
-
       </Sider>
     </Layout>
   );

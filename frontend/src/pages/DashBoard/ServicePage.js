@@ -1,9 +1,12 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { servicesReducer, actionTypes } from "./servicesReducer";
+import {
+  servicesReducer,
+  actionTypes,
+} from "../../components/Reducers/servicesReducer";
 import { useFetchData } from "../../utils/FetchData";
 import { Button, Card, Col, Form, Modal, Row } from "antd";
-import ServiceForm from "./ServiceForm";
-import ServiceCard from "./ServiceCard";
+import ServiceForm from "../../components/Services/ServiceForm";
+import ServiceCard from "../../components/Services/ServiceCard";
 import { convertToMinutes } from "../../utils/utilFunctions";
 import { useForm } from "antd/lib/form/Form";
 

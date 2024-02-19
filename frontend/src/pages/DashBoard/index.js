@@ -7,8 +7,8 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import CalendarPage from "../components/CalendarView";
-import UserServices from "../components/ServicesView";
+import CalendarPage from "./CalendarPage";
+import UserServices from "./ServicePage";
 import {
   UserOutlined,
   CalendarOutlined,
@@ -30,7 +30,7 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem("User", "user", <UserOutlined />, []),
   getItem("My Services", "services", <BarsOutlined />),
-  getItem("My Schedule", "schedule", <ScheduleOutlined />),
+  getItem("My Availability", "schedule", <ScheduleOutlined />),
   getItem("Calendar", "", <CalendarOutlined />),
 ];
 

@@ -8,8 +8,8 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import SlotForm from "./SlotForm";
-import { useFetchData } from "../../../utils/FetchData";
-import { checkTimeConflict } from "../../../utils/utilFunctions";
+import { useFetchData } from "../../utils/FetchData";
+import { checkTimeConflict } from "../../utils/utilFunctions";
 
 export default function SlotsTable({ service }) {
   const [slots, setSlots] = useState([]);
