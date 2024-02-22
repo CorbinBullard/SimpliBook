@@ -24,7 +24,8 @@ router.post("/", async (req, res, next) => {
   const slot = await Slot.findByPk(slot_id, {
     include: [{ model: ServiceType }],
   });
-  const capacity = slot.ServiceType.capacity;
+  console.log("Slot", slot);
+  const capacity = slot?.ServiceType?.capacity || 0;
 
   if (!bookingCheck(date, slot))
     return res.json({ message: "Invalid date or slot" });
@@ -49,17 +50,10 @@ router.post("/", async (req, res, next) => {
   const newBooking = {
     user_id: user.toJSON().id,
     slot: slot_id,
-    date,
     ...req.body,
-    // FAKE NAME
-    name: "John Doe",
-    // FAKE NUMBER
-    number: "123-456-7890",
-    // FAKE EMAIL
-    email: "faker@email.com",
   };
 
-  const booking = await Booking.create({ ...newBooking });
+  const booking = await Booking.create(newBooking);
   return res.json({ booking });
 });
 

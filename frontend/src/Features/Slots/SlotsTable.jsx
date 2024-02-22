@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal, Space, Table, Tree } from "antd";
 import dayjs from "dayjs";
-// import DayTimeline from "../DayTimeline";
+import { daysOfWeek } from "../../utils/constants";
 import {
   CalendarOutlined,
   ClockCircleOutlined,
@@ -27,17 +27,8 @@ export default function SlotsTable({ service }) {
     fetchSlots();
   }, []);
 
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
 
-  const treeData = days.map((day, index) => {
+  const treeData = daysOfWeek.map((day, index) => {
     return {
       value: index,
       title: day,
@@ -70,7 +61,6 @@ export default function SlotsTable({ service }) {
     form
       .validateFields()
       .then((values) => {
-        console.log("Values", values);
         const newSlot = {
           ...values,
           service_type_id: service.id,
@@ -79,7 +69,6 @@ export default function SlotsTable({ service }) {
             .add(service.duration, "minute")
             .format("HH:mm:ss"),
         };
-        console.log("New Slot", newSlot);
         fetch(`/api/services/${service.id}/slots`, {
           method: "POST",
           body: JSON.stringify(newSlot),
@@ -131,7 +120,7 @@ export default function SlotsTable({ service }) {
       >
         <SlotForm
           form={form}
-          days={days}
+          days={daysOfWeek}
           data={data}
           slots={slots.filter((slot) => slot.day === data.day)}
           duration={service.duration}

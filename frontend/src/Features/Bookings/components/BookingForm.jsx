@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Form, Input, Space, Select } from "antd";
+import { Button, Checkbox, Form, Input, Space, Select, InputNumber } from "antd";
 import dayjs from "dayjs";
 
 const { Item } = Form;
@@ -13,25 +13,21 @@ const formTypes = {
   paid: "checkbox",
 };
 
-export default function BookingForm({ date, form, slots }) {
-
+export default function BookingForm({ date, form, slots, data }) {
   return (
-    <Form form={form}>
+    <Form form={form} initialValues={data}>
       <Item label="Name" rules={[{ required: true }]} name="name">
         <Input />
       </Item>
       <Item label="Email" rules={[{ required: true }]} name="email">
         <Input type="email" />
       </Item>
-      {/* <Item label="Time" rules={[{ required: true }]} name="time"> */}
-        {/* <Select>
-          {slots.map((slot) => (
-            <Option value={slot.id} placeholder="Time">
-              {dayjs(slot.start_time, "HH:mm").format("h:mm a")}
-            </Option>
-          ))}
-        </Select> */}
-      {/* </Item> */}
+      <Item label="Phone" rules={[{ required: true }]} name="number">
+        <Input type="phone" />
+      </Item>
+      <Item label="Persons" rules={[{ required: true }]} name="persons">
+        <InputNumber />
+      </Item>
     </Form>
   );
 }

@@ -2,9 +2,9 @@ const bookingCheck = (date, slot) => {
   const bookingDate = new Date(date);
   const today = new Date();
   const info = {};
-  if (bookingDate < today) {
-    return false;
-  }
+  // if (bookingDate < today) {
+  //   return false;
+  // }
 
   const day = bookingDate.getDay();
   const start_time = bookingDate.toTimeString().split(" ")[0];

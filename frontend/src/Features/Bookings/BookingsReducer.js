@@ -8,6 +8,7 @@ export const actionTypes = {
 };
 
 export const BookingsReducer = (state, action) => {
+  console.log("STATE : ", state);
   switch (action.type) {
     case actionTypes.SET_BOOKINGS:
       const bookingsObj = {};
@@ -22,7 +23,14 @@ export const BookingsReducer = (state, action) => {
       });
       return bookingsObj;
     case actionTypes.CREATE_BOOKING:
-      return [...state, action.payload];
+      console.log("Action Payload : ", action.payload);
+      return {
+        ...state,
+        [dayjs(action.payload.date).format("YYYY-MM-DD")]: [
+          ...(state[dayjs(action.payload.date).format("YYYY-MM-DD")] || []),
+          action.payload,
+        ],
+      };
     case actionTypes.UPDATE_BOOKING:
       return state.map((booking) =>
         booking.id === action.payload.id ? action.payload : booking

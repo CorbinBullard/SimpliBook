@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useFetchData } from "../../utils/FetchData";
-import WeekView from "../../components/Availability/WeekView";
+import { useFetchData } from "../utils/FetchData";
+import WeekView from "../Features/Availability/WeekView";
 
 export default function SchedulePage() {
   const [slots, setSlots] = useState([]);

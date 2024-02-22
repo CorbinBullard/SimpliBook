@@ -10,11 +10,11 @@ import {
   CalendarOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme, Drawer } from "antd";
-import CalendarPage from "./pages/DashBoard/CalendarPage";
-import DashBoard from "./pages/DashBoard";
-import DemoPage from "./pages/DemoPage";
-import UserServices from "./pages/DashBoard/ServicePage";
-import SchedulePage from "./pages/DashBoard/AvailabilityPage";
+import CalendarPage from "./pages/CalendarPage";
+import DashBoard from "./components/Layout/DashBoard";
+import DemoPage from "./components/Layout/DemoPage";
+import UserServices from "./pages/ServicePage";
+import SchedulePage from "./pages/AvailabilityPage";
 
 const { Header, Content, Footer, Sider } = Layout;
 

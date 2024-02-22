@@ -4,14 +4,14 @@ import {
   capitalize,
   convertToMinutes,
   convertToTime,
-} from "../../utils/utilFunctions";
+} from "../../../utils/utilFunctions";
 import { EditOutlined, CloseOutlined, DeleteOutlined } from "@ant-design/icons";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Divider, Popconfirm } from "antd";
 import ServiceForm from "./ServiceForm";
 import dayjs from "dayjs";
 import moment from "moment/moment";
-import SlotsTable from "../Slots/SlotsTable";
+import SlotsTable from "../../Slots/SlotsTable";
 
 export default function ServiceCard({ service, update, handleDelete, slots }) {
   const [isUpdating, setIsUpdating] = useState(false);

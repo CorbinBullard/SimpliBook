@@ -11,20 +11,16 @@ export default function SlotForm({ form, data, days, slots, duration }) {
     // Ensure you're also setting the time state if data.start_time changes
     // setTime(data.start_time ? moment(data.start_time, "HH:mm:ss") : null);
     form.setFieldsValue(data);
-    console.log(data, form);
   }, [data, form]);
 
   const handleTimeChange = (time) => {
     setTime(time);
-    console.log("Time", duration);
     if (time) {
       const formattedTime = dayjs(time, "HH:mm:ss").format("HH:mm:ss");
       const endTime = dayjs(time, "HH:mm:ss")
         .add(duration, "minute")
         .format("HH:mm:ss");
-      console.log("End Time", endTime);
       const isConflicting = checkTimeConflict(formattedTime, endTime, slots);
-      console.log("Conflicting? ", isConflicting);
       setConflicting(isConflicting);
 
       // Update form's start_time with the new value
@@ -32,7 +28,6 @@ export default function SlotForm({ form, data, days, slots, duration }) {
       form.setFieldsValue({ end_time: endTime });
     }
   };
-  console.log("RENDER");
 
   return (
     <Form form={form} initialValues={data}>

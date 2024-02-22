@@ -4,6 +4,7 @@ const { validateTime } = require("../../utils/dateTimeValidators");
 const { requireAuth } = require("../../utils/auth");
 const dayjs = require("dayjs");
 const { Op } = require("sequelize");
+const { bookingCheck } = require("../../utils/bookingCheck");
 
 const router = express.Router();
 
@@ -38,6 +39,43 @@ router.get("/", async (req, res, next) => {
     ],
   });
   return res.json(slots);
+});
+
+// Create Booking from Slot
+router.post("/:id/bookings", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const { id } = req.params;
+  const slot = await Slot.findByPk(id, {
+    include: [{ model: ServiceType }],
+  });
+  if (!slot) return res.json({ message: "Slot not found" });
+  const capacity = slot.ServiceType.capacity;
+  const { date, persons } = req.body;
+  if (!bookingCheck(date, slot.toJSON()))
+    return res.json({ message: "Invalid date or slot" });
+  const conflictingBookings = await Booking.findAll({
+    where: {
+      slot_id: id,
+      date,
+    },
+  });
+  if (conflictingBookings.length) {
+    bookingsJSON = conflictingBookings.map((booking) => booking.toJSON());
+    const currentCapacity = bookingsJSON.reduce(
+      (acc, curr) => (acc += curr.persons),
+      0
+    );
+    if (currentCapacity + persons > capacity)
+      return res.json({ message: "Not enough space" });
+  }
+  const newBooking = {
+    user_id: user.toJSON().id,
+    slot_id: id,
+    ...req.body,
+    recurring: false,
+  };
+  const booking = await Booking.create(newBooking);
+  return res.json(booking);
 });
 
 router.delete("/:id", requireAuth, async (req, res, next) => {

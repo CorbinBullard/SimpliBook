@@ -7,8 +7,8 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import CalendarPage from "./CalendarPage";
-import UserServices from "./ServicePage";
+import CalendarPage from "../../pages/CalendarPage";
+import UserServices from "../../pages/ServicePage";
 import {
   UserOutlined,
   CalendarOutlined,
