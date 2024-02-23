@@ -1,5 +1,5 @@
 import React from "react";
-import TimelineBlock from "../../components/UI/Timeline/TimelineBlock";
+import TimelineBlock from "../../../components/UI/Timeline/TimelineBlock";
 import { Drawer } from "antd";
 
 export default function SlotBlock({ children, top, height, color, onClick }) {

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal, Space, Table, Tree } from "antd";
 import dayjs from "dayjs";
-import { daysOfWeek } from "../../utils/constants";
+import { daysOfWeek } from "../../../utils/constants";
 import {
   CalendarOutlined,
   ClockCircleOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import SlotForm from "./SlotForm";
-import { useFetchData } from "../../utils/FetchData";
-import { checkTimeConflict } from "../../utils/utilFunctions";
+import { useFetchData } from "../../../utils/FetchData";
+import { checkTimeConflict } from "../../../utils/utilFunctions";
 
 export default function SlotsTable({ service }) {
   const [slots, setSlots] = useState([]);
@@ -26,7 +26,6 @@ export default function SlotsTable({ service }) {
     };
     fetchSlots();
   }, []);
-
 
   const treeData = daysOfWeek.map((day, index) => {
     return {

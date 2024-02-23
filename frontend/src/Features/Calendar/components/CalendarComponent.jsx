@@ -10,10 +10,15 @@ import { useFetchData } from "../../../utils/FetchData";
 const localizer = momentLocalizer(moment);
 
 export default function CalendarComponent({ bookings, onClick }) {
+  const [formattedBookings, setFormattedBookings] = useState([]);
+  useEffect(() => {
+    setFormattedBookings(Object.values(bookings));
+  }, [bookings]);
+  console.log(formattedBookings);
   return (
     <Calendar
       localizer={localizer}
-      events={bookings}
+      events={formattedBookings}
       startAccessor="start"
       endAccessor="end"
       style={{ height: "100%", marginRight: "1rem", overflow: "auto" }}

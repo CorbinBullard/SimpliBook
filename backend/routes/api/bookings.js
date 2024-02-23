@@ -14,7 +14,6 @@ router.get("/", async (req, res, next) => {
     include: [
       {
         model: Slot,
-        attributes: ["end_time"],
         include: [{ model: ServiceType, attributes: ["name"] }],
       },
     ],

@@ -14,8 +14,8 @@ const { Sider, Content } = Layout;
 export default function CalendarPage() {
   const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [bookings, dispatchBookings] = useReducer(BookingsReducer, []);
-  
+  const [bookings, dispatchBookings] = useReducer(BookingsReducer, {});
+
 
   // Fetch bookings from the server
   const fetchedBookings = useFetchData("/api/bookings");

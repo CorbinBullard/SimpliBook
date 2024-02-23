@@ -11,7 +11,7 @@ import { Divider, Popconfirm } from "antd";
 import ServiceForm from "./ServiceForm";
 import dayjs from "dayjs";
 import moment from "moment/moment";
-import SlotsTable from "../../Slots/SlotsTable";
+import SlotsTable from "../../Slots/components/SlotsTable";
 
 export default function ServiceCard({ service, update, handleDelete, slots }) {
   const [isUpdating, setIsUpdating] = useState(false);
