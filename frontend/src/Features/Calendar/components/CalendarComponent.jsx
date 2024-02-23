@@ -1,62 +1,24 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { Calendar, Badge } from "antd";
+import { Badge } from "antd";
 import { list } from "postcss";
 import * as dayjs from "dayjs";
-export default function CalendarComponent({ bookings, setDate }) {
-  const onPanelChange = (value, mode) => {};
-  const onSelect = (value) => {
-    setDate(value.format("YYYY-MM-DD"));
-  };
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useFetchData } from "../../../utils/FetchData";
 
-  const getListData = (value) => {
-    let listData;
-    if (bookings[value.format("YYYY-MM-DD")]) {
-      listData = bookings[value.format("YYYY-MM-DD")]
-        .map((booking) => {
-          return {
-            content: `${booking.time}, ${booking.name}`,
-            type: "success",
-          };
-        })
-        .sort((a, b) => a.start_time - b.start_time);
-    }
-    return listData || [];
-  };
+const localizer = momentLocalizer(moment);
 
-  const dateCellRender = (value) => {
-    const listData = getListData(value);
-    return (
-      <div>
-        {listData.length ? (
-          <Badge
-            status={listData[0].type}
-            text={`Bookings: ${listData.length}`}
-          />
-        ) : null}
-      </div>
-    );
-  };
-  const monthCellRender = (value) => {
-    const num = getListData(value).length;
-    return num ? (
-      <div className="notes-month">
-        <section>{num} Bookings</section>
-      </div>
-    ) : null;
-  };
-  const cellRender = (current, info) => {
-    if (info.type === "date") return dateCellRender(current);
-    if (info.type === "month") return monthCellRender(current);
-    return info.originNode;
-  };
-
+export default function CalendarComponent({ bookings, onClick }) {
   return (
     <Calendar
-      style={{ minWidth: "600px" }}
-      onSelect={onSelect}
-      onPanelChange={onPanelChange}
-      cellRender={cellRender}
-      // mode="month" // Year will error right now
+      localizer={localizer}
+      events={bookings}
+      startAccessor="start"
+      endAccessor="end"
+      style={{ height: "100%", marginRight: "1rem", overflow: "auto" }}
+      onSelectEvent={onClick}
+      defaultView="week"
     />
   );
 }

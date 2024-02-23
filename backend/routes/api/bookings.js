@@ -4,14 +4,36 @@ const router = express.Router();
 const { bookingCheck } = require("../../utils/bookingCheck.js");
 const { ServiceType } = require("../../db/models");
 const { Op } = require("sequelize");
+const dayjs = require("dayjs");
 
 router.get("/", async (req, res, next) => {
   const { user } = req;
   if (!user) return res.json({ message: "No user found" });
-  const bookings = await Booking.findAll({
+  let bookings = await Booking.findAll({
     where: { user_id: user.toJSON().id },
+    include: [
+      {
+        model: Slot,
+        attributes: ["end_time"],
+        include: [{ model: ServiceType, attributes: ["name"] }],
+      },
+    ],
   });
+  bookings = bookings.map((booking) => {
+    const bookingJSON = booking.toJSON();
+    // Assuming each booking has one slot and each slot has one serviceType
+    const endTime = bookingJSON.Slot ? `${dayjs(bookingJSON.date).format("YYYY-MM-DD")}T${bookingJSON.Slot.end_time}` : null;
+    const serviceName =
+      bookingJSON.Slot && bookingJSON.Slot.ServiceType
+        ? bookingJSON.Slot.ServiceType.name
+        : null;
 
+    return {
+      ...bookingJSON,
+      end_time: endTime,
+      serviceName: serviceName,
+    };
+  });
   return res.json({ bookings });
 });
 

@@ -11,17 +11,25 @@ export const BookingsReducer = (state, action) => {
   console.log("STATE : ", state);
   switch (action.type) {
     case actionTypes.SET_BOOKINGS:
-      const bookingsObj = {};
-      action.payload.bookings.forEach((booking) => {
-        booking.time = dayjs(booking.date).format("h:mm a");
-        const date = dayjs(booking.date).format("YYYY-MM-DD");
-        if (bookingsObj[date]) {
-          bookingsObj[date].push(booking);
-        } else {
-          bookingsObj[date] = [booking];
-        }
+      const bookingsArr = [];
+      // action.payload.bookings.forEach((booking) => {
+      //   booking.time = dayjs(booking.date).format("h:mm a");
+      //   const date = dayjs(booking.date).format("YYYY-MM-DD");
+      //   if (bookingsObj[date]) {
+      //     bookingsObj[date].push(booking);
+      //   } else {
+      //     bookingsObj[date] = [booking];
+      //   }
+      // });
+
+      return action.payload.bookings.map((booking) => {
+        console.log("Booking : ", booking);
+        return {
+          title: booking.serviceName,
+          start: new Date(booking.date),
+          end: new Date(booking.end_time),
+        };
       });
-      return bookingsObj;
     case actionTypes.CREATE_BOOKING:
       console.log("Action Payload : ", action.payload);
       return {

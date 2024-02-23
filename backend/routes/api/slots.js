@@ -17,6 +17,7 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   const { user } = req;
   const { date } = req.query;
+  const { bookings } = req.query;
 
   if (!user) return res.json({ message: "No user found" });
 
@@ -26,6 +27,7 @@ router.get("/", async (req, res, next) => {
   if (date) {
     where.day = dayjs(date).format("d");
   }
+  console.log("\nBOOKINGS --- ", bookings, "\n\n");
   const slots = await Slot.findAll({
     where,
     include: [
@@ -34,8 +36,9 @@ router.get("/", async (req, res, next) => {
         where: {
           date: { [Op.substring]: dayjs(date).format("YYYY-MM-DD") },
         },
-        required: false, // This makes the inclusion of bookings optional, thus including slots even if there are no bookings for the given date
+        required: bookings ? true : false, // This makes the inclusion of bookings optional, thus including slots even if there are no bookings for the given date
       },
+      { model: ServiceType, attributes: ["name"] },
     ],
   });
   return res.json(slots);
