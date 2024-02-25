@@ -2,8 +2,8 @@ import React, { useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router";
 import * as dayjs from "dayjs";
 import { Drawer, Layout } from "antd";
-import CalendarComponent from "../Features/Calendar/components/CalendarComponent";
-import CurrentDateDetails from "../Features/Calendar/components/CurrentDateDetails";
+import CalendarComponent from "../Features/Calendar/CalendarComponent";
+import CurrentSlotBookings from "../Features/Calendar/CurrentSlotBookings";
 import { useFetchData } from "../utils/FetchData";
 import {
   BookingsReducer,
@@ -12,10 +12,9 @@ import {
 const { Sider, Content } = Layout;
 
 export default function CalendarPage() {
-  const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [bookings, dispatchBookings] = useReducer(BookingsReducer, {});
-
+  const [currentSlot, setCurrentSlot] = useState({});
 
   // Fetch bookings from the server
   const fetchedBookings = useFetchData("/api/bookings");
@@ -26,8 +25,11 @@ export default function CalendarPage() {
         payload: fetchedBookings,
       });
     }
-
   }, [fetchedBookings]);
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
 
   const createNewBooking = async (booking) => {
     dispatchBookings({ type: actionTypes.CREATE_BOOKING, payload: booking });
@@ -46,28 +48,24 @@ export default function CalendarPage() {
     await fetch(`/api/bookings/${id}`, { method: "DELETE" });
     dispatchBookings({ type: actionTypes.DELETE_BOOKING, payload: id });
   };
-  const handleBookingClicked = (booking) => {
-    console.log(booking);
+  const onSlotClick = (slot) => {
+    setCurrentSlot(slot);
+    const date = dayjs(slot.start).format("YYYY-MM-DD");
     setIsDrawerOpen(true);
   };
-
   return (
     <Layout>
       <Content style={{ height: "85vh" }}>
-        <CalendarComponent
-          bookings={bookings}
-          setDate={setDate}
-          onClick={handleBookingClicked}
-        />
+        <CalendarComponent bookings={bookings} onClick={onSlotClick} />
       </Content>
-      <Drawer open={isDrawerOpen}></Drawer>
-
-      {/* <Sider style={{ paddingLeft: "1rem", background: "#fff" }} width={350}>
-        <CurrentDateDetails
-          date={date}
-          createBooking={createNewBooking}
+      <Drawer open={isDrawerOpen} onClose={handleDrawerClose}>
+        <CurrentSlotBookings
+          bookings={currentSlot.bookings}
+          date={dayjs(currentSlot.start).format("ddd, MMM D ")}
+          slot={currentSlot}
+          createNewBooking={createNewBooking}
         />
-      </Sider> */}
+      </Drawer>
     </Layout>
   );
 }

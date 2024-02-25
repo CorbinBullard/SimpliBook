@@ -27,7 +27,6 @@ router.get("/", async (req, res, next) => {
   if (date) {
     where.day = dayjs(date).format("d");
   }
-  console.log("\nBOOKINGS --- ", bookings, "\n\n");
   const slots = await Slot.findAll({
     where,
     include: [
@@ -42,6 +41,17 @@ router.get("/", async (req, res, next) => {
     ],
   });
   return res.json(slots);
+});
+
+router.get("/:id/bookings", async (req, res, next) => {
+  const { date } = req.query;
+  const { id } = req.params;
+  const slot = await Slot.findByPk(id);
+  if (!slot) return res.json({ message: "Slot not found" });
+  const bookings = await slot.getBookings({
+    where: { date: { [Op.substring]: dayjs(date).format("YYYY-MM-DD") } },
+  });
+  return res.json(bookings);
 });
 
 // Create Booking from Slot

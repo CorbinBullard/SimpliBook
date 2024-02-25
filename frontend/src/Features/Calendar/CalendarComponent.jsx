@@ -5,7 +5,7 @@ import * as dayjs from "dayjs";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useFetchData } from "../../../utils/FetchData";
+import { useFetchData } from "../../utils/FetchData";
 
 const localizer = momentLocalizer(moment);
 
@@ -14,7 +14,7 @@ export default function CalendarComponent({ bookings, onClick }) {
   useEffect(() => {
     setFormattedBookings(Object.values(bookings));
   }, [bookings]);
-  console.log(formattedBookings);
+
   return (
     <Calendar
       localizer={localizer}

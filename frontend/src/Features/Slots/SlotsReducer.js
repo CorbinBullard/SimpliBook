@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
 
 export const actionTypes = {
-  SET_BOOKINGS: "SET_BOOKINGS",
-  CREATE_BOOKING: "CREATE_BOOKING",
-  UPDATE_BOOKING: "UPDATE_BOOKING",
-  DELETE_BOOKING: "DELETE_BOOKING",
+  SET_SLOTS: "SET_SLOTS",
+  CREATE_SLOT: "CREATE_SLOT",
+  UPDATE_SLOT: "UPDATE_SLOT",
+  DELETE_SLOT: "DELETE_SLOT",
 };
 
 export const SlotsReducer = (state, action) => {
