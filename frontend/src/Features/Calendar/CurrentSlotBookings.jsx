@@ -15,6 +15,8 @@ export default function CurrentSlotBookings({
   date,
   bookings,
   createNewBooking,
+  handleDelete,
+  handleUpdate,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -29,6 +31,7 @@ export default function CurrentSlotBookings({
       .validateFields()
       .then((values) => {
         const newBooking = {
+          slot_id: slot.slot_id,
           ...values,
           date: dayjs(slot.start).format("YYYY-MM-DDTHH:mm:ss"),
         };
@@ -64,7 +67,12 @@ export default function CurrentSlotBookings({
         title={dayjs(slot.start).format("ddd, MMM D @ h:mm a")}
       >
         {bookings.map((booking) => (
-          <BookingCard booking={booking} key={booking.id} />
+          <BookingCard
+            booking={booking}
+            key={booking.id}
+            handleDelete={handleDelete}
+            update={handleUpdate}
+          />
         ))}
       </Card>
       <Button block onClick={handleOpenModal}>
@@ -85,7 +93,7 @@ export default function CurrentSlotBookings({
           form={form}
           slot={slot}
           date={date}
-          data={{ date, time: dayjs(slot.start).format("HH:mm:ss")}}
+          data={{ date, time: dayjs(slot.start).format("HH:mm:ss") }}
         />
       </Modal>
     </>

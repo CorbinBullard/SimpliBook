@@ -4,7 +4,6 @@ import { list } from "postcss";
 import * as dayjs from "dayjs";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useFetchData } from "../../utils/FetchData";
 
 const localizer = momentLocalizer(moment);

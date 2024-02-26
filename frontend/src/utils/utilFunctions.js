@@ -32,6 +32,9 @@ export function checkTimeConflict(start_time, end_time, timeSlotsArray) {
 }
 
 export function deepCopy(obj) {
+  if (obj instanceof Date) {
+    return new Date(obj.getTime());
+  }
   const target = Array.isArray(obj) ? [] : {};
   for (let key in obj) {
     let value = obj[key];

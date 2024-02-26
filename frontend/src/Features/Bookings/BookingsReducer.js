@@ -36,8 +36,8 @@ export const BookingsReducer = (state, action) => {
     }
     case actionTypes.CREATE_BOOKING: {
       newState = deepCopy(state);
+      console.log("Old State: ", newState);
       const date = dayjs(action.payload.date).format("YYYY-MM-DDTHH:mm:ss");
-      console.log("Date: ", date, action.payload);
       if (newState[date]) {
         // If the date already exists, append the new booking
         newState[date].bookings = [...newState[date].bookings, action.payload];
@@ -51,15 +51,46 @@ export const BookingsReducer = (state, action) => {
           bookings: [action.payload], // Initialize with the new booking
         };
       }
+      console.log("New State: ", newState);
       return newState;
     }
 
-    case actionTypes.UPDATE_BOOKING:
-      return state.map((booking) =>
-        booking.id === action.payload.id ? action.payload : booking
+    case actionTypes.UPDATE_BOOKING: {
+      newState = deepCopy(state);
+
+      // Format the date from the action payload
+      const date = dayjs(action.payload.date).format("YYYY-MM-DDTHH:mm:ss");
+
+      // Check if the date exists in the newState
+      if (!newState[date]) {
+        console.error(
+          "Date does not exist in the state, cannot update booking."
+        );
+        return newState; // Return the unchanged state if the date doesn't exist
+      }
+
+      // Update the booking in the existing date
+      const updatedBookings = newState[date].bookings.map((booking) =>
+        booking.id === action.payload.id
+          ? { ...booking, ...action.payload }
+          : booking
       );
-    case actionTypes.DELETE_BOOKING:
-      return state.filter((booking) => booking.id !== action.payload);
+
+      // Update the bookings for the date
+      newState[date].bookings = updatedBookings;
+
+      console.log("Updated State: ", newState);
+      return newState;
+    }
+
+    case actionTypes.DELETE_BOOKING: {
+      newState = deepCopy(state);
+      const date = dayjs(action.payload.date).format("YYYY-MM-DDTHH:mm:ss");
+      newState[date].bookings = newState[date].bookings.filter(
+        (booking) => booking.id !== action.payload
+      );
+      return newState;
+    }
     default:
       return state;
   }

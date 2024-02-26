@@ -4,8 +4,12 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { notification } from "antd";
+const Context = React.createContext();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+// const [api, contextHolder] = notification.useNotification();
 root.render(
   <React.StrictMode>
     <Router>

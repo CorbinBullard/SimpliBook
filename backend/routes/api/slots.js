@@ -49,7 +49,10 @@ router.get("/:id/bookings", async (req, res, next) => {
   const slot = await Slot.findByPk(id);
   if (!slot) return res.json({ message: "Slot not found" });
   const bookings = await slot.getBookings({
-    where: { date: { [Op.substring]: dayjs(date).format("YYYY-MM-DD") } },
+    where: {
+      date: { [Op.substring]: dayjs(date).format("YYYY-MM-DD") },
+      required: false,
+    },
   });
   return res.json(bookings);
 });

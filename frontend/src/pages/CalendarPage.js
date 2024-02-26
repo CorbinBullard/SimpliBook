@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router";
 import * as dayjs from "dayjs";
-import { Drawer, Layout } from "antd";
+import { Drawer, Layout, notification } from "antd";
 import CalendarComponent from "../Features/Calendar/CalendarComponent";
 import CurrentSlotBookings from "../Features/Calendar/CurrentSlotBookings";
 import { useFetchData } from "../utils/FetchData";
@@ -33,6 +33,12 @@ export default function CalendarPage() {
 
   const createNewBooking = async (booking) => {
     dispatchBookings({ type: actionTypes.CREATE_BOOKING, payload: booking });
+    setIsDrawerOpen(false);
+    // This should be reusable and show different outcomes as well
+    notification.success({
+      message: "Booking Created",
+      description: "Booking has been created successfully",
+    });
   };
   const handleUpdate = async (booking) => {
     await fetch(`/api/bookings/${booking.id}`, {
@@ -64,6 +70,8 @@ export default function CalendarPage() {
           date={dayjs(currentSlot.start).format("ddd, MMM D ")}
           slot={currentSlot}
           createNewBooking={createNewBooking}
+          handleDelete={handleDelete}
+          handleUpdate={handleUpdate}
         />
       </Drawer>
     </Layout>

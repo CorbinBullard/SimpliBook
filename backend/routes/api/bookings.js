@@ -21,7 +21,11 @@ router.get("/", async (req, res, next) => {
   bookings = bookings.map((booking) => {
     const bookingJSON = booking.toJSON();
     // Assuming each booking has one slot and each slot has one serviceType
-    const endTime = bookingJSON.Slot ? `${dayjs(bookingJSON.date).format("YYYY-MM-DD")}T${bookingJSON.Slot.end_time}` : null;
+    const endTime = bookingJSON.Slot
+      ? `${dayjs(bookingJSON.date).format("YYYY-MM-DD")}T${
+          bookingJSON.Slot.end_time
+        }`
+      : null;
     const serviceName =
       bookingJSON.Slot && bookingJSON.Slot.ServiceType
         ? bookingJSON.Slot.ServiceType.name
@@ -95,6 +99,14 @@ router.get("/:date/date", async (req, res, next) => {
     include: [{ model: Slot, include: [{ model: ServiceType }] }],
   });
   return res.json(bookings);
+});
+
+router.put("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const booking = await Booking.findByPk(id);
+  if (!booking) return res.json({ message: "Booking not found" });
+  await booking.update(req.body);
+  return res.json(booking);
 });
 
 module.exports = router;
