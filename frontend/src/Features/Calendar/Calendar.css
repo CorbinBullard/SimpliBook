@@ -1,0 +1,61 @@
+.rbc-calendar {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+/* Header styling */
+.rbc-toolbar {
+  background-color: #fafafa;
+  color: rgba(0, 0, 0, 0.85);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.rbc-toolbar button {
+  color: rgba(0, 0, 0, 0.65);
+  border: none;
+  background-color: #fafafa;
+}
+
+.rbc-toolbar button:hover {
+  color: #1890ff;
+  background-color: #e6f7ff;
+}
+
+/* Month view day headers */
+.rbc-header {
+  background-color: #fafafa;
+  color: rgba(0, 0, 0, 0.85);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Today styling */
+.rbc-today {
+  background-color: #e6f7ff !important;
+}
+
+/* Event styling */
+.rbc-event {
+  background-color: #1890ff;
+  color: white;
+  border-radius: 2px;
+  border: none;
+  padding: 2px 5px;
+}
+
+.rbc-event:hover {
+  background-color: #40a9ff;
+}
+
+/* Agenda view */
+.rbc-agenda-view table {
+  border-color: #f0f0f0;
+}
+
+.rbc-agenda-date-cell, .rbc-agenda-time-cell {
+  padding: 8px 10px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.rbc-agenda-event-cell {
+  padding: 8px 10px;
+}

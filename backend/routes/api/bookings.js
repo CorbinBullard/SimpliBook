@@ -49,7 +49,6 @@ router.post("/", async (req, res, next) => {
   const slot = await Slot.findByPk(slot_id, {
     include: [{ model: ServiceType }],
   });
-  console.log("Slot", slot);
   const capacity = slot?.ServiceType?.capacity || 0;
 
   if (!bookingCheck(date, slot))

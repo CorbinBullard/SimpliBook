@@ -23,10 +23,8 @@ export default function BookingBlock({
   };
   const handleDrawerClose = (e) => {
     e.stopPropagation();
-    console.log("handleDrawerClose");
     setDrawerOpen(false);
   };
-  console.log(drawerOpen, "isModalOpen");
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -62,7 +60,7 @@ export default function BookingBlock({
       color={"blue"}
       onClick={handleDrawerOpen}
     >
-      
+
       <Drawer open={drawerOpen} onClose={handleDrawerClose} placement="left">
         <Card
           style={{

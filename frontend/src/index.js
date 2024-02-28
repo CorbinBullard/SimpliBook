@@ -6,15 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { notification } from "antd";
+import { NotificationProvider } from "./providers/notification";
 const Context = React.createContext();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-// const [api, contextHolder] = notification.useNotification();
 root.render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <NotificationProvider>
+      <Router>
+        <App />
+      </Router>
+    </NotificationProvider>
   </React.StrictMode>
 );
 

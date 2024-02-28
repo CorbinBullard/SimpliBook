@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { useNavigate } from "react-router";
+import { Layout, Drawer, notification } from "antd";
 import * as dayjs from "dayjs";
-import { Drawer, Layout, notification } from "antd";
 import CalendarComponent from "../Features/Calendar/CalendarComponent";
 import CurrentSlotBookings from "../Features/Calendar/CurrentSlotBookings";
 import { useFetchData } from "../utils/FetchData";
@@ -9,69 +8,89 @@ import {
   BookingsReducer,
   actionTypes,
 } from "../Features/Bookings/BookingsReducer";
-const { Sider, Content } = Layout;
+import { useNotification } from "../providers/notification";
+const { Content } = Layout;
 
-export default function CalendarPage() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [bookings, dispatchBookings] = useReducer(BookingsReducer, {});
-  const [currentSlot, setCurrentSlot] = useState({});
-
-  // Fetch bookings from the server
+// Custom hook for handling bookings
+function useBookings(initialState = {}) {
+  const [bookings, dispatch] = useReducer(BookingsReducer, initialState);
   const fetchedBookings = useFetchData("/api/bookings");
+
   useEffect(() => {
     if (fetchedBookings) {
-      dispatchBookings({
+      dispatch({
         type: actionTypes.SET_BOOKINGS,
         payload: fetchedBookings,
       });
     }
   }, [fetchedBookings]);
 
-  const handleDrawerClose = () => {
-    setIsDrawerOpen(false);
+  return [bookings, dispatch];
+}
+
+// Main component
+export default function CalendarPage() {
+  const openNotification = useNotification();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [currentSlot, setCurrentSlot] = useState({});
+  const [bookings, dispatchBookings] = useBookings();
+
+  const toggleDrawer = (isOpen) => setIsDrawerOpen(isOpen);
+
+  const handleBookingOperation = async (booking, operationType) => {
+    if (operationType !== actionTypes.CREATE_BOOKING) {
+      const method =
+        operationType === actionTypes.DELETE_BOOKING ? "DELETE" : "PUT";
+      const endpoint = `/api/bookings/${
+        operationType === actionTypes.DELETE_BOOKING ? booking : booking.id
+      }`;
+      await fetch(endpoint, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        ...(method === "PUT" && { body: JSON.stringify(booking) }),
+      });
+    }
+    dispatchBookings({ type: operationType, payload: booking });
+    toggleDrawer(false);
+
+    const oPmessage =
+      operationType === actionTypes.DELETE_BOOKING
+        ? "Deleted"
+        : operationType === actionTypes.CREATE_BOOKING
+        ? "Created"
+        : "Updated";
+
+    openNotification({
+      message: "Success",
+      description: `Booking has been ${oPmessage}`,
+      type: "success",
+    });
   };
 
-  const createNewBooking = async (booking) => {
-    dispatchBookings({ type: actionTypes.CREATE_BOOKING, payload: booking });
-    setIsDrawerOpen(false);
-    // This should be reusable and show different outcomes as well
-    notification.success({
-      message: "Booking Created",
-      description: "Booking has been created successfully",
-    });
-  };
-  const handleUpdate = async (booking) => {
-    await fetch(`/api/bookings/${booking.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(booking),
-    });
-    dispatchBookings({ type: actionTypes.UPDATE_BOOKING, payload: booking });
-  };
-  const handleDelete = async (id) => {
-    await fetch(`/api/bookings/${id}`, { method: "DELETE" });
-    dispatchBookings({ type: actionTypes.DELETE_BOOKING, payload: id });
-  };
   const onSlotClick = (slot) => {
     setCurrentSlot(slot);
-    const date = dayjs(slot.start).format("YYYY-MM-DD");
-    setIsDrawerOpen(true);
+    toggleDrawer(true);
   };
+
   return (
     <Layout>
       <Content style={{ height: "85vh" }}>
         <CalendarComponent bookings={bookings} onClick={onSlotClick} />
       </Content>
-      <Drawer open={isDrawerOpen} onClose={handleDrawerClose}>
+      <Drawer open={isDrawerOpen} onClose={() => toggleDrawer(false)}>
         <CurrentSlotBookings
           bookings={currentSlot.bookings}
           date={dayjs(currentSlot.start).format("ddd, MMM D ")}
           slot={currentSlot}
-          createNewBooking={createNewBooking}
-          handleDelete={handleDelete}
-          handleUpdate={handleUpdate}
+          createNewBooking={(booking) =>
+            handleBookingOperation(booking, actionTypes.CREATE_BOOKING)
+          }
+          handleDelete={(id) =>
+            handleBookingOperation(id, actionTypes.DELETE_BOOKING)
+          }
+          handleUpdate={(booking) =>
+            handleBookingOperation(booking, actionTypes.UPDATE_BOOKING)
+          }
         />
       </Drawer>
     </Layout>

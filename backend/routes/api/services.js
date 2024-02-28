@@ -12,6 +12,7 @@ router.get("/", requireAuth, async (req, res) => {
   if (!user) return res.json({ message: "No user found" });
   const serviceTypes = await ServiceType.findAll({
     where: { user_id: user.toJSON().id },
+    include: Slot,
   });
   return res.json(serviceTypes);
 });

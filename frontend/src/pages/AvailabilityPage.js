@@ -1,16 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useFetchData } from "../utils/FetchData";
 import WeekView from "../Features/Availability/WeekView";
+import { Select } from "antd";
 
-export default function SchedulePage() {
+export default function AvailabilityPage() {
+  const [currentService, setCurrentService] = useState({});
   const [slots, setSlots] = useState([]);
+  const services = useFetchData("/api/services");
   useEffect(() => {
-    fetch("/api/slots")
-      .then((res) => res.json())
-      .then((data) => {
-        setSlots(data);
-      });
-  }, []);
+    if (services) setCurrentService(services[0]);
+  }, [services]);
 
-  return <WeekView slots={slots} />;
+  const handleChange = (value) => {
+    setCurrentService(services[value]);
+  }
+
+  if (!services) return null;
+  return (
+    <>
+      <Select
+        style={{ width: "15vw", marginBottom: "1vh" }}
+        value={currentService.name}
+        onChange={handleChange}
+      >
+        {services &&
+          services.map((service, i) => (
+            <Select.Option key={service.id} value={i}>
+              {service.name}
+            </Select.Option>
+          ))}
+      </Select>
+      <WeekView slots={currentService.Slots} />
+    </>
+  );
 }

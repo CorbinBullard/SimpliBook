@@ -21,7 +21,6 @@ export default function CurrentSlotBookings({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
-  console.log(slot);
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -35,7 +34,6 @@ export default function CurrentSlotBookings({
           ...values,
           date: dayjs(slot.start).format("YYYY-MM-DDTHH:mm:ss"),
         };
-        console.log(newBooking);
         // return
         fetch(`/api/slots/${slot.slot_id}/bookings`, {
           method: "POST",
@@ -53,6 +51,7 @@ export default function CurrentSlotBookings({
         console.log("Validate Failed:", info);
       });
   };
+
   return (
     <>
       <Card
@@ -66,14 +65,17 @@ export default function CurrentSlotBookings({
         }}
         title={dayjs(slot.start).format("ddd, MMM D @ h:mm a")}
       >
-        {bookings.map((booking) => (
-          <BookingCard
-            booking={booking}
-            key={booking.id}
-            handleDelete={handleDelete}
-            update={handleUpdate}
-          />
-        ))}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {bookings &&
+            bookings.map((booking) => (
+              <BookingCard
+                booking={booking}
+                key={booking.id}
+                handleDelete={() => handleDelete(booking.id)}
+                update={handleUpdate}
+              />
+            ))}
+        </div>
       </Card>
       <Button block onClick={handleOpenModal}>
         {" "}

@@ -50,7 +50,8 @@ export default function UserServices() {
 
   const handleUpdate = (service) =>
     dispatchServices({ type: actionTypes.UPDATE_SERVICE, payload: service });
-  const handleDelete = async (id) => {
+
+    const handleDelete = async (id) => {
     await fetch(`/api/services/${id}`, { method: "DELETE" });
     dispatchServices({ type: actionTypes.DELETE_SERVICE, payload: id });
   };

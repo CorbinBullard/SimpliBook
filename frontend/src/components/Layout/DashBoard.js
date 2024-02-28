@@ -81,7 +81,7 @@ export default function DashBoard({ session }) {
           <Outlet />
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          SimpliBook ©{new Date().getFullYear()} Created by Corbin Bullard
         </Footer>
       </Layout>
     </Layout>
