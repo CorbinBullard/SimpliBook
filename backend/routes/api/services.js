@@ -71,27 +71,33 @@ router.get("/:id/slots", requireAuth, async (req, res, next) => {
   });
   return res.json(slots);
 });
-//Create a slot for a specific service type
+
+// Create a slot for a specific service type
 router.post("/:id/slots", requireAuth, validateTime, async (req, res, next) => {
   const { user } = req;
   const { id } = req.params;
-  const { day, start_time, end_time, service_type_id } = req.body;
+  const { day, start_time, end_time } = req.body;
 
   if (!user) return res.json({ message: "No user found" });
   const slots = await Slot.findAll({
     where: {
       user_id: user.toJSON().id,
       day,
-      service_type_id,
+      service_type_id: id,
     },
   });
-  for (const slot of slots) {
-    if (
-      (start_time > slot.toJSON().start_time &&
-        start_time < slot.toJSON().end_time) ||
-      (end_time > slot.toJSON().start_time && end_time < slot.toJSON().end_time)
-    )
-      return res.json({ message: "Time conflict" });
+
+
+  const hasConflict = slots.some((slot) => {
+    const existingStart = slot.start_time;
+    const existingEnd = slot.end_time;
+    // Check if the new slot starts or ends during an existing slot
+    return start_time < existingEnd && end_time > existingStart;
+  });
+
+  // If there's a conflict, return an error message
+  if (hasConflict) {
+    return res.status(409).json({ message: "Time conflict" }); // 409 Conflict
   }
 
   const slot = await Slot.create({
@@ -99,7 +105,7 @@ router.post("/:id/slots", requireAuth, validateTime, async (req, res, next) => {
     start_time,
     end_time,
     user_id: user.toJSON().id,
-    service_type_id,
+    service_type_id: id,
   });
   return res.json(slot);
 });

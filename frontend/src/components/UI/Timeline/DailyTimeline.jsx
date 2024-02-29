@@ -62,7 +62,7 @@ export default function DailyTimeLine({
       {hoursOfDay.map((hour) => (
         <>
           <Divider
-            style={{ padding: 0, margin: 0, height: 0 }}
+            style={{ padding: 0, margin: 0, height: 0, fontSize: "11px"}}
             orientation="left"
             orientationMargin={5}
           >

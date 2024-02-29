@@ -16,7 +16,6 @@ import DemoPage from "./components/Layout/DemoPage";
 import UserServices from "./pages/ServicePage";
 import SchedulePage from "./pages/AvailabilityPage";
 
-
 const { Header, Content, Footer, Sider } = Layout;
 
 function getItem(label, key, icon, children) {
@@ -39,7 +38,6 @@ function App() {
   const [collapsed, setCollapsed] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
 
   const {
     token: { colorBgContainer, borderRadiusLG },

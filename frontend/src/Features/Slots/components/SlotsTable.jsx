@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Button, Form, Modal, Space, Table, Tree } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
+import { Button, Form, Modal, Popconfirm, Space, Table, Tree } from "antd";
 import dayjs from "dayjs";
 import { daysOfWeek } from "../../../utils/constants";
 import {
   CalendarOutlined,
   ClockCircleOutlined,
   PlusCircleOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import SlotForm from "./SlotForm";
 import { useFetchData } from "../../../utils/FetchData";
 import { checkTimeConflict } from "../../../utils/utilFunctions";
+import moment from "moment";
 
 export default function SlotsTable({ service }) {
   const [slots, setSlots] = useState([]);
@@ -25,36 +27,65 @@ export default function SlotsTable({ service }) {
       setSlots(data);
     };
     fetchSlots();
-  }, []);
+  }, [service.id]);
 
-  const treeData = daysOfWeek.map((day, index) => {
-    return {
-      value: index,
-      title: day,
-      selectable: false,
-      children: [
-        ...slots
-          .filter((slot) => slot.day === index)
-          .map((slot) => {
-            return {
-              selectable: false,
-              value: slot.id,
-              icon: <ClockCircleOutlined />,
-              title: dayjs(`2024-03-12T${slot.start_time}`).format("h:mm a"),
-            };
-          }),
-        {
-          title: "Add Slot",
-          icon: <PlusCircleOutlined />,
-          key: index,
-        },
-      ],
-    };
-  });
+  const treeData = useMemo(
+    () =>
+      daysOfWeek.map((day, index) => {
+        return {
+          value: index,
+          key: `day-${index}`,
+          title: day,
+          selectable: false,
+          children: [
+            ...slots
+              .filter((slot) => slot.day === index)
+              .map((slot) => {
+                return {
+                  slot_id: slot.id,
+                  selectable: true,
+                  value: slot.id,
+                  icon: <ClockCircleOutlined />,
+                  title: (
+                    <>
+                      <Popconfirm
+                        title="Are you sure to delete this slot?"
+                        onConfirm={() => handleDelete(slot.id)}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        {dayjs(slot.start_time, "HH:mm:ss").format("h:mm a")}{" "}
+                      </Popconfirm>
+                    </>
+                  ),
+                  time: slot.start_time,
+                  day: index,
+                  key: slot.id,
+                };
+              }),
+            {
+              title: "Add Slot",
+              icon: <PlusCircleOutlined />,
+              key: `add-${index}`,
+              day: index,
+            },
+          ],
+        };
+      }),
+    [daysOfWeek, slots]
+  );
+
   const handleSelect = (selectedKeys, info) => {
-    setSelectedNodes(selectedKeys);
-    setData({ ...data, day: info.node.key });
-    setIsModalOpen(true);
+    const node = info.node;
+    if (node.slot_id) {
+    } else {
+      setSelectedNodes(selectedKeys);
+      setData({
+        ...data,
+        day: node.day,
+      });
+      setIsModalOpen(true);
+    }
   };
   const handleSubmit = () => {
     form
@@ -78,6 +109,7 @@ export default function SlotsTable({ service }) {
             setSlots([...slots, data]);
             form.resetFields();
             setIsModalOpen(false);
+            setSelectedNodes([]);
           });
       })
       .catch((error) => {
@@ -86,19 +118,28 @@ export default function SlotsTable({ service }) {
 
     return;
   };
+  const handleDelete = (id) => {
+    fetch(`/api/slots/${id}`, { method: "DELETE" }).then(() => {
+      setSlots(slots.filter((slot) => slot.id !== id));
+    });
+  };
+
   const handleCancel = () => {
+    console.log("cancel");
+    setSelectedNodes([]);
     setIsModalOpen(false);
   };
 
   return (
     <>
       <Tree
-        // selectable={false}
+        selectedKeys={selectedNodes}
         style={{ width: "100%" }}
         showIcon
         onSelect={handleSelect}
         treeData={[
           {
+            key: "Schedule",
             selectable: false,
             title: "Schedule",
             value: "",

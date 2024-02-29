@@ -9,6 +9,7 @@ import ServiceForm from "../Features/Services/components/ServiceForm";
 import ServiceCard from "../Features/Services/components/ServiceCard";
 import { convertToMinutes } from "../utils/utilFunctions";
 import { useForm } from "antd/lib/form/Form";
+import WeekView from "../Features/Availability/WeekView";
 
 export default function UserServices() {
   const [services, dispatchServices] = useReducer(servicesReducer, []);
@@ -81,6 +82,7 @@ export default function UserServices() {
           </Card>
         </Col>
       </Row>
+      
       <Modal
         title="New Service"
         open={isModalOpen}
