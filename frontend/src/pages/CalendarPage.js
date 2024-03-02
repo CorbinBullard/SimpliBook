@@ -53,7 +53,7 @@ export default function CalendarPage() {
     dispatchBookings({ type: operationType, payload: booking });
     toggleDrawer(false);
 
-    const oPmessage =
+    const opMessage =
       operationType === actionTypes.DELETE_BOOKING
         ? "Deleted"
         : operationType === actionTypes.CREATE_BOOKING
@@ -62,7 +62,7 @@ export default function CalendarPage() {
 
     openNotification({
       message: "Success",
-      description: `Booking has been ${oPmessage}`,
+      description: `Booking has been ${opMessage}`,
       type: "success",
     });
   };
@@ -82,15 +82,7 @@ export default function CalendarPage() {
           bookings={currentSlot.bookings}
           date={dayjs(currentSlot.start).format("ddd, MMM D ")}
           slot={currentSlot}
-          createNewBooking={(booking) =>
-            handleBookingOperation(booking, actionTypes.CREATE_BOOKING)
-          }
-          handleDelete={(id) =>
-            handleBookingOperation(id, actionTypes.DELETE_BOOKING)
-          }
-          handleUpdate={(booking) =>
-            handleBookingOperation(booking, actionTypes.UPDATE_BOOKING)
-          }
+          handleBookingOperation={handleBookingOperation}
         />
       </Drawer>
     </Layout>

@@ -20,14 +20,14 @@ module.exports = {
           day: 1,
           user_id: 1,
           start_time: "09:00:00",
-          end_time: "17:00:00",
+          end_time: "09:30:00",
         },
         {
           service_type_id: 1,
           day: 2,
           user_id: 1,
           start_time: "10:00:00",
-          end_time: "18:00:00",
+          end_time: "10:30:00",
         },
       ],
       {}

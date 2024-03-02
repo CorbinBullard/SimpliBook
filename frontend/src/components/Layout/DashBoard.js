@@ -6,33 +6,13 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-
+import { getItem, getItems } from "./UserMenuLayout";
 import CalendarPage from "../../pages/CalendarPage";
 import UserServices from "../../pages/ServicePage";
-import {
-  UserOutlined,
-  CalendarOutlined,
-  BarsOutlined,
-  ScheduleOutlined,
-} from "@ant-design/icons";
-import { Layout, Menu, theme, Drawer } from "antd";
+
+import { Layout, Menu, theme, Drawer, Button } from "antd";
 
 const { Header, Content, Footer, Sider } = Layout;
-
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-const items = [
-  getItem("User", "user", <UserOutlined />, []),
-  getItem("My Services", "services", <BarsOutlined />),
-  getItem("My Availability", "schedule", <ScheduleOutlined />),
-  getItem("Calendar", "", <CalendarOutlined />),
-];
 
 export default function DashBoard({ session }) {
   const location = useLocation();
@@ -44,6 +24,8 @@ export default function DashBoard({ session }) {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const { user } = session;
+
   useEffect(() => {
     if (session?.user === null) {
       navigate("/");
@@ -51,8 +33,18 @@ export default function DashBoard({ session }) {
   }, [session, navigate]);
 
   function handleNavigation(e) {
+    console.log(e);
+    if (e.key === "logout") {
+      fetch("/api/session", {
+        method: "DELETE",
+      }).then(() => {
+        navigate("/");
+      });
+      return;
+    }
     navigate(e.key);
   }
+
   return (
     <Layout style={{ maxHeight: "100vh", minHeight: "100vh" }}>
       <Sider
@@ -65,7 +57,7 @@ export default function DashBoard({ session }) {
           theme="dark"
           defaultSelectedKeys={[`${location.pathname.split("/")[2] || ""}`]}
           mode="inline"
-          items={items}
+          items={getItems(user)}
           onClick={(e) => handleNavigation(e)}
         />
       </Sider>

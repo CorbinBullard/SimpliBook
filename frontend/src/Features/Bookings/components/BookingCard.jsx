@@ -29,7 +29,7 @@ export default function BookingCard({ booking, handleDelete, update }) {
       .catch((errorInfo) => {
         console.log("Failed:", errorInfo);
       });
-  }
+  };
   const [form] = Form.useForm();
   return (
     <Card

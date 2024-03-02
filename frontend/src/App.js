@@ -15,6 +15,7 @@ import DashBoard from "./components/Layout/DashBoard";
 import DemoPage from "./components/Layout/DemoPage";
 import UserServices from "./pages/ServicePage";
 import SchedulePage from "./pages/AvailabilityPage";
+import AccountPage from "./pages/AccountPage";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -62,6 +63,7 @@ function App() {
             <Route index element={<CalendarPage />} />
             <Route path="services" element={<UserServices />} />
             <Route path="schedule" element={<SchedulePage />} />
+            <Route path="account" element={<AccountPage session={session} />} />
           </Route>
         </Routes>
       )}

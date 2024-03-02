@@ -25,12 +25,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      // public_key: {
-      //   type: Sequelize.STRING,
-      // },
-      // hashed_private_key: {
-      //   type: Sequelize.STRING,
-      // },
+      public_key: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      hashed_private_key: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -15,7 +15,8 @@ export default function AvailabilityPage() {
     setCurrentService(services[value]);
   }
 
-  if (!services) return null;
+  if (!services?.length) return null;
+  console.log(services)
   return (
     <>
       <Select

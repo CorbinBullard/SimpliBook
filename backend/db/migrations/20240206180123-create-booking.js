@@ -28,6 +28,7 @@ module.exports = {
       recurring: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       name: {
         allowNull: false,

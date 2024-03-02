@@ -8,15 +8,16 @@ import DailyTimeLine from "../../components/UI/Timeline/DailyTimeline";
 import BookingBlock from "../Bookings/components/BookingBlock";
 import BookingCard from "../Bookings/components/BookingCard";
 import BookingForm from "../Bookings/components/BookingForm";
+import { BookingsReducer, actionTypes } from "../Bookings/BookingsReducer";
 const { Panel } = Collapse;
 
 export default function CurrentSlotBookings({
   slot,
   date,
   bookings,
-  createNewBooking,
   handleDelete,
   handleUpdate,
+  handleBookingOperation,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -42,9 +43,9 @@ export default function CurrentSlotBookings({
         })
           .then((response) => response.json())
           .then((data) => {
-            setIsModalOpen(false);
             form.resetFields();
-            createNewBooking(data);
+            setIsModalOpen(false);
+            handleBookingOperation(data, actionTypes.CREATE_BOOKING);
           });
       })
       .catch((info) => {
@@ -71,8 +72,12 @@ export default function CurrentSlotBookings({
               <BookingCard
                 booking={booking}
                 key={booking.id}
-                handleDelete={() => handleDelete(booking.id)}
-                update={handleUpdate}
+                handleDelete={() =>
+                  handleBookingOperation(booking.id, actionTypes.DELETE_BOOKING)
+                }
+                update={(booking) =>
+                  handleBookingOperation(booking, actionTypes.UPDATE_BOOKING)
+                }
               />
             ))}
         </div>

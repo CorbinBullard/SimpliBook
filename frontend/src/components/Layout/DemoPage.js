@@ -1,5 +1,8 @@
-import React from "react";
+import { Button } from "antd";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router";
+import { SimpliBookKeys } from "../../utils/constants";
+import ExternalTestPage from "../../pages/ExternalTestPage";
 
 export default function DemoPage({ session }) {
   const navigate = useNavigate();
@@ -19,10 +22,12 @@ export default function DemoPage({ session }) {
       navigate("/dashboard");
     });
   };
+
   return (
     <div>
       <h1>Sign In</h1>
-      <button onClick={handleSubmit}>SIGN IN</button>
+      <Button onClick={handleSubmit}>SIGN IN</Button>
+      <ExternalTestPage />
     </div>
   );
 }

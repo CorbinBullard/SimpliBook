@@ -7,21 +7,19 @@ import moment from "moment";
 import { useFetchData } from "../../utils/FetchData";
 import "./Calendar.css";
 import timezone from "dayjs/plugin/timezone";
+import CalendarToolbar from "./components/CalendarToolbar";
 
 dayjs.extend(timezone);
 
 const localizer = dayjsLocalizer(dayjs);
 
 export default function CalendarComponent({ bookings, onClick }) {
-  // const [formattedBookings, setFormattedBookings] = useState([]);
-
   const formattedBookings = useMemo(() => {
     const bookingsArray = Object.groupBy(
       Object.values(bookings),
       (booking) => booking.date
     );
     // change bookingsArray to an array of objects that have a nested array of bookings that have the same date and time
-    // setFormattedBookings(
     return Object.entries(bookingsArray).map(([date, bookings]) => {
       return {
         slot_id: bookings[0].slot_id,
@@ -37,15 +35,8 @@ export default function CalendarComponent({ bookings, onClick }) {
         bookings,
       };
     });
-    // );
   }, [bookings]);
 
-  console.log(
-    "Formatted Bookings: ",
-    formattedBookings,
-    "\nBookings: ",
-    bookings
-  );
   return (
     <Calendar
       localizer={localizer}
@@ -61,6 +52,7 @@ export default function CalendarComponent({ bookings, onClick }) {
       onSelectEvent={onClick}
       defaultView="week"
       views={["week", "month", "day"]}
+      components={{ toolbar: (props) => <CalendarToolbar {...props} /> }}
     />
   );
 }

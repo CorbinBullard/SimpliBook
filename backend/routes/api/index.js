@@ -9,5 +9,6 @@ router.use("/session", require("./session"));
 router.use("/users", require("./users"));
 router.use("/slots", require("./slots"));
 router.use("/bookings", require("./bookings"));
+router.use("/external", require("./external"));
 
 module.exports = router;
