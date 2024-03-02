@@ -125,7 +125,6 @@ export default function SlotsTable({ service }) {
   };
 
   const handleCancel = () => {
-    console.log("cancel");
     setSelectedNodes([]);
     setIsModalOpen(false);
   };

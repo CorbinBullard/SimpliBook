@@ -7,7 +7,6 @@ import {
 } from "@ant-design/icons";
 
 export default function CalendarToolbar(toolbar) {
-    console.log(toolbar)
   const goToBack = () => {
     toolbar.onNavigate("PREV");
   };

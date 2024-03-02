@@ -15,8 +15,6 @@ export default function ExternalTestPage() {
       persons: 2,
     });
   };
-  console.log(process.env);
-  console.log(SimpliBookKeys);
   const keys = {
     public_key: SimpliBookKeys.public_key,
     private_key: SimpliBookKeys.private_key,

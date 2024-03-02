@@ -33,7 +33,6 @@ export default function DashBoard({ session }) {
   }, [session, navigate]);
 
   function handleNavigation(e) {
-    console.log(e);
     if (e.key === "logout") {
       fetch("/api/session", {
         method: "DELETE",

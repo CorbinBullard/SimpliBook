@@ -55,7 +55,6 @@ router.get("/slots/:date", async (req, res) => {
     if (!slots || slots.length === 0) return res.status(404).json([]);
 
     const availableSlots = slots.map((slot) => {
-      console.log(slot.toJSON());
       const slotJSON = slot.toJSON();
       const bookedPersons = slotJSON.Bookings.reduce(
         (acc, booking) => acc + booking.persons,
@@ -95,10 +94,9 @@ router.post("/slots/:slot_id/bookings", async (req, res) => {
         {
           model: ServiceType,
           attributes: ["capacity"],
-        }, 
+        },
       ],
     });
-    console.log("SLOT : ", slot.toJSON());
 
     if (!slot) return res.status(404).json({ message: "No slot found" });
 

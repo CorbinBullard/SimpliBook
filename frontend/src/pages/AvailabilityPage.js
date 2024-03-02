@@ -16,7 +16,6 @@ export default function AvailabilityPage() {
   }
 
   if (!services?.length) return null;
-  console.log(services)
   return (
     <>
       <Select
